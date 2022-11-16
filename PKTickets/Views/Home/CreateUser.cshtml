@@ -1,0 +1,123 @@
+﻿@using PKTickets.Models.DTO
+@model UserDTO
+
+@{
+    string title = "Create User";
+    if (Model.UserId > 0)
+    {
+        title = "Edit User";
+    }
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    string meth = "GoCustomer()";
+    string role = "";
+    @if (User.Identity.IsAuthenticated)
+    {
+        role = User.Identity.GetClaimRole();
+    }
+
+
+
+
+}
+@if (role == "")
+{
+    meth = "GoIndex()";
+}
+<button type="button" class="btn btn-light pb-2"
+        style="background-color:lightgoldenrodyellow;" onclick=@meth>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+    </svg>
+    Back to List
+</button>
+<center> <h2 class="text-danger">@title</h2></center>
+
+<style>
+    .required:after {
+        content: " *";
+        color: red;
+    }
+</style>
+
+@using (Html.BeginForm(FormMethod.Post, new { id = "CreateUser" }))
+{
+
+    <div class="container border rounded bg-light text-dark w-50 pt-2">
+
+
+
+        @Html.HiddenFor(x=>x.UserId, new{@class="form-control"})
+
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required">User Name:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.UserName, new {@class="form-control", type="string", required = "required", maxlength = "15"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required">Mobile Number:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.PhoneNumber, new {@class="form-control", required = "required",type="number", maxlength = "10",min="6000000000",max="9999999999"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required"> Email Id:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.EmailId,new {@class="form-control",required = "required",type="email",placeHolder="enter your email here"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required">Location:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.Location,  new {@class="form-control", required = "required" , maxlength = "20"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required">Password:</label>
+            </div>
+            <div class="col-4">
+                @Html.TextBoxFor(x=>x.Password, new {@class="form-control",required = "required",type="password"})
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <label class="required">Role Name:</label>
+            </div>
+            <div class="col-4">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (role == "Admin")
+                    {
+                        @Html.DropDownListFor(model => model.RoleId,Model.RoleIds  , new { required = "required" ,@class="form-control"})
+                    }
+                    else
+                    {
+                        { Model.RoleId = 2; }
+                        @Html.HiddenFor(model => model.RoleId)
+                        @Html.DropDownListFor(model => model.RoleId,Model.RoleIds  , new { @disabled="disabled",required = "required" ,@class="form-control"})
+                    }
+                }
+                else
+                {
+                    @*{ Model.RoleId = 2; }
+                    @Html.HiddenFor(model => model.RoleId)*@
+                    @Html.DropDownListFor(model => model.RoleId,Model.RoleIds  , new { @disabled="disabled",required = "required" ,@class="form-control"})
+                }
+            </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+            <div class="col-3">
+                <button type="submit" class="btn btn-outline-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+}

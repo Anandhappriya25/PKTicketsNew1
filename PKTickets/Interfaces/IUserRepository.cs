@@ -11,7 +11,7 @@ namespace PKTickets.Interfaces
         public User UserByPhone(string phone);
         public User UserByEmail(string email);
         public Messages CreateUser(UserDTO user);
-        public Messages UpdateUser(User user);
+        public Messages UpdateUser(UserDTO userDTO);
         public Messages DeleteUser(int userId);
         public LoginResultDTO GetLoginDetail(string emailId, string password);
         public IEnumerable<UserDTO> UsersList();

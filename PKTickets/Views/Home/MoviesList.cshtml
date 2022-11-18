@@ -1,8 +1,8 @@
 ﻿@using PKTickets.Models.DTO
 @model List<Movie>
 
-<h2 style="font-weight;">  Movies List </h2>
-<table class="table table-hover" id="dataTable">
+<h2 >  Movies List </h2>
+@*<table class="table table-hover" id="dataTable">
     <thead style="background-color: lightcyan;">
         <tr>
             <th class="align-text-top">Movie Id</th>
@@ -51,4 +51,18 @@
             $("#dataTable").DataTable();
         })
     </script>
-}
+}*@
+<div class="container-fluid p-5">
+    <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 row-cols-lg-4">
+  
+     @foreach (Movie movie in Model)
+    {
+        
+  
+               <div class="pt-3 pb-3 "> <a class="nav-link" asp-controller="Home" asp-action="" asp-route-id="@movie.MovieId">
+                <img width="250px" height="350px" src="/css/Image/@movie.ImagePath">
+                </a><div class="container text-center"><h3>@movie.Title</h3> </div>
+       </div>
+            
+        }
+</div></div>

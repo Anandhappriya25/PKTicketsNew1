@@ -39,7 +39,6 @@ namespace PKTickets.Repository
         public Messages CreateUser(UserDTO user)
         {
             User users = new User();
-            users.UserId = user.UserId;
             users.UserName = user.UserName;
             users.PhoneNumber = user.PhoneNumber;
             users.Location = user.Location;
@@ -48,6 +47,7 @@ namespace PKTickets.Repository
             users.RoleId = user.RoleId;
             Messages messages = new Messages();
             messages.Success = false;
+            messages.Role=user.Role;
             var phoneExist = db.Users.FirstOrDefault(x => x.PhoneNumber==user.PhoneNumber);
             var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == user.EmailId);
             if (phoneExist != null)
@@ -65,7 +65,7 @@ namespace PKTickets.Repository
                 db.Users.Add(users);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "User is succssfully added";
+                messages.Message = users.UserName+", Succssfully Registered the Account";
                 return messages;
             }
         }
@@ -99,13 +99,21 @@ namespace PKTickets.Repository
             return db.Roles.ToList();
         }
 
-        public Messages UpdateUser(User user)
+        public Messages UpdateUser(UserDTO userDTO)
         {
             Messages messages = new Messages();
             messages.Success = false;
-            var userExist = UserById(user.UserId);
-            var phoneExist = db.Users.FirstOrDefault(x => x.PhoneNumber == user.PhoneNumber);
-            var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == user.EmailId);
+            messages.Role = userDTO.Role;
+            User users = new User();
+            users.UserName = userDTO.UserName;
+            users.PhoneNumber = userDTO.PhoneNumber;
+            users.Location = userDTO.Location;
+            users.EmailId = userDTO.EmailId;
+            users.Password = userDTO.Password;
+            users.RoleId = userDTO.RoleId;
+            var userExist = UserById(userDTO.UserId);
+            var phoneExist = db.Users.FirstOrDefault(x => x.PhoneNumber == userDTO.PhoneNumber);
+            var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == userDTO.EmailId);
             if (userExist == null)
             {
                 messages.Message = "User Id is not found";
@@ -123,12 +131,12 @@ namespace PKTickets.Repository
             }
             else
             {
-                userExist.UserName = user.UserName;
-                userExist.PhoneNumber = user.PhoneNumber;
-                userExist.EmailId = user.EmailId;
-                userExist.Password = user.Password;
-                userExist.Location = user.Location;
-                userExist.RoleId = user.RoleId;
+                userExist.UserName = userDTO.UserName;
+                userExist.PhoneNumber = userDTO.PhoneNumber;
+                userExist.EmailId = userDTO.EmailId;
+                userExist.Password = userDTO.Password;
+                userExist.Location = userDTO.Location;
+                userExist.RoleId = userDTO.RoleId;
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "User is succssfully updated";

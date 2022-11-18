@@ -4,7 +4,8 @@
     {
         public string Message { get; set; }
 
-        public bool Success { get; set; } 
+        public bool Success { get; set; }
+        public bool Role { get; set; }
 
     }
 }

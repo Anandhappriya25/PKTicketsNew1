@@ -20,7 +20,7 @@ namespace PKTickets.Controllers
 {
     public class HomeController : Controller
     {
-         private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> _logger;
         private readonly IUserRepository _userRepository;
         private readonly IPayTypeRepository _payTypeRepository;
         private readonly ITheaterRepository _theaterRepository;
@@ -30,13 +30,15 @@ namespace PKTickets.Controllers
         private readonly IShowTimeRepository _showTimeRepository;
         private readonly IReservationRepository _reservationRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IWebHostEnvironment WebHostEnvironment;
 
 
         public HomeController(ILogger<HomeController> logger, IUserRepository userRepository,
-            IPayTypeRepository payTypeRepository , IMovieRepository movieRepository, 
+            IPayTypeRepository payTypeRepository, IMovieRepository movieRepository,
             ITheaterRepository theaterRepository, IScreenRepository screenRepository,
             IShowRepository seatRepository, IShowTimeRepository showTimeRepository,
-            IReservationRepository reservationRepository,IRoleRepository roleRepository)
+            IReservationRepository reservationRepository, IRoleRepository roleRepository,
+            IWebHostEnvironment _webHostEnvironment)
         {
             _logger = logger;
             _userRepository = userRepository;
@@ -48,6 +50,7 @@ namespace PKTickets.Controllers
             _showTimeRepository = showTimeRepository;
             _reservationRepository = reservationRepository;
             _roleRepository = roleRepository;
+            WebHostEnvironment = _webHostEnvironment;
         }
 
         [Authorize]
@@ -115,7 +118,7 @@ namespace PKTickets.Controllers
 
         }
 
-       
+
         public IActionResult UsersList()
         {
             var usersList = _userRepository.UsersList();
@@ -132,19 +135,21 @@ namespace PKTickets.Controllers
                 {
                     userDTO.RoleIds = _userRepository.GetAllRole().Select(a => new SelectListItem
                     {
-                        Text = a.RoleName ,
+                        Text = a.RoleName,
                         Value = a.RoleId.ToString()
                     }).ToList();
                     userDTO.RoleIds.Insert(0, new SelectListItem { Text = "Select Role", Value = "" });
+                    userDTO.Role = true;
                 }
             }
             else
             {
                 userDTO.RoleIds = _userRepository.GetAllRole().Where(x => x.RoleName == "User").Select(a => new SelectListItem
                 {
-                    Text = a.RoleName ,
+                    Text = a.RoleName,
                     Value = a.RoleId.ToString()
                 }).ToList();
+                userDTO.Role = false;
             }
             return View(userDTO);
         }
@@ -154,8 +159,7 @@ namespace PKTickets.Controllers
         {
             if (user.UserId > 0)
             {
-                return View(user);
-               // return Json(_userRepository.UpdateCustomer(user));
+                return Json(_userRepository.UpdateUser(user));
             }
             else
             {
@@ -169,6 +173,25 @@ namespace PKTickets.Controllers
             var theatersList = _theaterRepository.GetTheaters();
             return View(theatersList);
         }
+
+        public IActionResult CreateTheater()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Theater(Theater theater)
+        {
+            if (theater.TheaterId > 0)
+            {
+                return Json(_theaterRepository.UpdateTheater(theater));
+            }
+            else
+            {
+                return Json(_theaterRepository.CreateTheater(theater));
+            }
+        }
+
 
         public IActionResult ShowtimesList()
         {
@@ -186,20 +209,48 @@ namespace PKTickets.Controllers
             var moviesList = _movieRepository.GetAllMovies();
             return View(moviesList);
         }
-        
-        public async Task<IActionResult> AddMovie(Movie movie)
+        public IActionResult AddMovie(Movie movie)
         {
-            //var uploadDirectory = "Css/Image/";
-            //string location = "~wwwroot/Css/Image/";
-            //var uploadPath = Path.Combine(WebHostEnvironment.WebRootPath, uploadDirectory);
-            //if(!Directory.Exists(uploadPath))
-            //    Directory.CreateDirectory(uploadPath);
-            //var fileName = Guid.NewGuid() + Path.GetExtension(movie.CoverPhoto.FileName);
-            //var imagePath=Path.Combine(uploadPath, fileName);
-            //await movie.CoverPhoto.CopyToAsync(new FileStream(imagePath,FileMode.Create));
-            //movie.ImagePath = fileName;
-            
-            return View("AddMovie");
+            return View(movie);
+        }
+        public async Task<IActionResult> Add(Movie movie)
+        {
+
+            var uploadDirectory = "Css/Image/";
+            string location = "~wwwroot/Css/Image/";
+            var uploadPath = Path.Combine(WebHostEnvironment.WebRootPath, uploadDirectory);
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+            var fileName = Guid.NewGuid() + Path.GetExtension(movie.CoverPhoto.FileName);
+            var imagePath = Path.Combine(uploadPath, fileName);
+            await movie.CoverPhoto.CopyToAsync(new FileStream(imagePath, FileMode.Create));
+            movie.ImagePath = fileName;
+            if (movie.MovieId > 0)
+            {
+                return Json(_movieRepository.UpdateMovie(movie));
+            }
+            else
+            {
+                return Json(_movieRepository.CreateMovie(movie));
+            }
+        }
+        public IActionResult MovieDetails(int id)
+        { 
+            return View(_movieRepository.MovieById(id));
+        }
+
+
+        [HttpPost]
+        public IActionResult SaveMovie(Movie movie)
+        {
+            if (movie.MovieId > 0)
+            {
+                return Json(_movieRepository.UpdateMovie(movie));
+            }
+            else
+            {
+                return Json(_movieRepository.CreateMovie(movie));
+            }
         }
     }
 }

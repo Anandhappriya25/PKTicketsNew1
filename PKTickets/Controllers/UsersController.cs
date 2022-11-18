@@ -52,7 +52,7 @@ namespace PKTickets.Controllers
 
 
         [HttpPut("UpdateUser")]
-        public ActionResult UpdateUser(User user)
+        public ActionResult UpdateUser(UserDTO user)
         {
             return Ok(userRepository.UpdateUser(user));
         }

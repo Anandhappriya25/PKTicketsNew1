@@ -8,17 +8,14 @@
         title = "Edit User";
     }
     //Layout = "~/Views/Shared/_Layout.cshtml";
-    string meth = "GoCustomer()";
+    string meth = "GoUser()";
     string role = "";
     @if (User.Identity.IsAuthenticated)
     {
         role = User.Identity.GetClaimRole();
     }
-
-
-
-
 }
+
 @if (role == "")
 {
     meth = "GoIndex()";
@@ -39,7 +36,7 @@
     }
 </style>
 
-@using (Html.BeginForm(FormMethod.Post, new { id = "CreateUser" }))
+@using (Html.BeginForm(FormMethod.Post, new { id = "CreateUsers" }))
 {
 
     <div class="container border rounded bg-light text-dark w-50 pt-2">
@@ -108,8 +105,8 @@
                 }
                 else
                 {
-                    @*{ Model.RoleId = 2; }
-                    @Html.HiddenFor(model => model.RoleId)*@
+                    { Model.RoleId = 2; }
+                    @Html.HiddenFor(model => model.RoleId)
                     @Html.DropDownListFor(model => model.RoleId,Model.RoleIds  , new { @disabled="disabled",required = "required" ,@class="form-control"})
                 }
             </div>
@@ -120,4 +117,7 @@
             </div>
         </div>
     </div>
+}
+@section scripts{
+    <script src="~/js/createusers.js"></script>
 }

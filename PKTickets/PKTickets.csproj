@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\logo\logo.jpg" />
-    <None Include="wwwroot\js\CreateUser.js" />
+    <None Include="wwwroot\js\CreateUsers.js" />
   </ItemGroup>
 
   <ItemGroup>

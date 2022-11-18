@@ -26,10 +26,10 @@ namespace PKTickets.Models
 
         [Required(ErrorMessage = "Please Enter the Director Name !!!")]
         [StringLength(20, ErrorMessage = "Director Name length must be below 20 characters")]
-        public string Genre { get; set; }
+        public string Director { get; set; }
         [Required(ErrorMessage = "Please Enter the Genre !!!")]
         [StringLength(20, ErrorMessage = "Genre length must be below 20 characters")]
-        public string Director { get; set; }
+        public string Genre { get; set; }
         public bool IsPlaying { get; set; }=true;
         public string? ImagePath { get; set; }
         [NotMapped]

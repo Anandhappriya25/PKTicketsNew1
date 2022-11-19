@@ -16,40 +16,18 @@ namespace PKTickets.Models
         [ForeignKey("UserId")]
         public User? User { get; set; }
 
-        [Required(ErrorMessage = "Please Enter the Seat Id !!!")]
-        public int SeatId { get; set; }
+       
+        [Required(ErrorMessage = "Please Enter the Schedule Id !!!")]
+        public int ScheduleId { get; set; }
 
-        [ForeignKey("SeatId")]
-        public Seat? Seat { get; set; }
-        [Required(ErrorMessage = "Please Enter the Show Id !!!")]
-        public int ShowId { get; set; }
-
-        [ForeignKey("ShowId")]
-        public Show? Show { get; set; }
-
-        [Required(ErrorMessage = "Please Enter the PayType Id !!!")]
-        public int PayTypeId { get; set; }
-
-        [ForeignKey("PayTypeId")]
-        public PayType? PayType { get; set; }
+        [ForeignKey("ScheduleId")]
+        public Schedule? Schedule { get; set; }
 
 
         [Required(ErrorMessage = "Please enter the NumberOfTickets")]
         [Range(1, 10, ErrorMessage = "NumberOfTickets seats must be between 1 to 10")]
-        public int NumberOfTickets { get; set; } = 0;
-        public int FSBooked { get; set; } = 0;
-        public int SSBooked { get; set; } = 0;
-        public int TSBooked { get; set; } = 0;
-        public int? FOSBooked { get; set; } = 0;
-        public int? BSBooked { get; set; } = 0;
+        public int NumberOfTickets { get; set; } 
         public bool IsActive { get; set; }=true;
 
     }
 }
-//user id
-//reservation id
-//paytypeid
-//fsbooked
-//no of ticekts
-//show id
-//is active

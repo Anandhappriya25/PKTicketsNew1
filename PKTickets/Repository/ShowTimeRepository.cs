@@ -21,23 +21,23 @@ namespace PKTickets.Repository
             foreach (ShowTime showTime in showTimes)
             {
                 var time = TimingConvert.ConvertToString(showTime.ShowTiming);
-              showTimeDTO.Add(  new ShowTimeDTO { ShowTimeId = showTime.ShowTimeId, ShowTiming = time });
+                showTimeDTO.Add(new ShowTimeDTO { ShowTimeId = showTime.ShowTimeId, ShowTiming = time });
             }
             return showTimeDTO;
         }
-  
+
         public ShowTimeDTO ShowTimeasStringById(int id)
         {
             var showTime = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == id);
             if (showTime == null)
-            { 
+            {
                 return null;
             }
             else
             {
                 ShowTimeDTO showTimeDTO = new ShowTimeDTO();
                 showTimeDTO.ShowTimeId = showTime.ShowTimeId;
-                var time=TimingConvert.ConvertToString(showTime.ShowTiming);
+                var time = TimingConvert.ConvertToString(showTime.ShowTiming);
                 showTimeDTO.ShowTiming = time;
                 return showTimeDTO;
             }
@@ -56,7 +56,7 @@ namespace PKTickets.Repository
         {
             Messages messages = new Messages();
             messages.Success = false;
-            var showTime= TimeById(showTimeId);
+            var showTime = TimeById(showTimeId);
             if (showTime == null)
             {
                 messages.Message = "ShowTime Id is not found";
@@ -98,7 +98,7 @@ namespace PKTickets.Repository
             Messages messages = new Messages();
             messages.Success = false;
             var showTimeExist = TimeById(showTimeDTO.ShowTimeId);
-            var time= TimingConvert.ConvertToInt(showTimeDTO.ShowTiming);
+            var time = TimingConvert.ConvertToInt(showTimeDTO.ShowTiming);
             var nameExist = DetailsByTiming(time);
             if (showTimeExist == null)
             {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PKTickets.Migrations
 {
     /// <inheritdoc />
-    public partial class initir : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,28 +21,14 @@ namespace PKTickets.Migrations
                     Duration = table.Column<int>(type: "int", nullable: false),
                     CastAndCrew = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Language = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Genre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Director = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Genre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     IsPlaying = table.Column<bool>(type: "bit", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.MovieId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PayTypes",
-                columns: table => new
-                {
-                    TypeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PayTypes", x => x.TypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,29 +43,6 @@ namespace PKTickets.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.RoleId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Seats",
-                columns: table => new
-                {
-                    SeatId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ShowsId = table.Column<int>(type: "int", nullable: false),
-                    FSReserved = table.Column<int>(type: "int", nullable: false),
-                    SSReserved = table.Column<int>(type: "int", nullable: false),
-                    TSReserved = table.Column<int>(type: "int", nullable: false),
-                    FOSReserved = table.Column<int>(type: "int", nullable: true),
-                    BSReserved = table.Column<int>(type: "int", nullable: true),
-                    FSAvailable = table.Column<int>(type: "int", nullable: false),
-                    SSAvailable = table.Column<int>(type: "int", nullable: false),
-                    TSAvailable = table.Column<int>(type: "int", nullable: false),
-                    FOSAvailable = table.Column<int>(type: "int", nullable: true),
-                    BSAvailable = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Seats", x => x.SeatId);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,9 +66,6 @@ namespace PKTickets.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TheaterName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Location = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    NormalPrice = table.Column<int>(type: "int", nullable: false),
-                    BalconyPrice = table.Column<int>(type: "int", nullable: true),
-                    Screens = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -146,11 +106,10 @@ namespace PKTickets.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ScreenName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TheaterId = table.Column<int>(type: "int", nullable: false),
-                    FirstSection = table.Column<int>(type: "int", nullable: false),
-                    SecondSection = table.Column<int>(type: "int", nullable: false),
-                    ThirdSection = table.Column<int>(type: "int", nullable: false),
-                    FourthSection = table.Column<int>(type: "int", nullable: true),
-                    BalconySection = table.Column<int>(type: "int", nullable: true),
+                    PremiumCapacity = table.Column<int>(type: "int", nullable: false),
+                    EliteCapacity = table.Column<int>(type: "int", nullable: false),
+                    PremiumPrice = table.Column<int>(type: "int", nullable: false),
+                    ElitePrice = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -165,34 +124,38 @@ namespace PKTickets.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Shows",
+                name: "Schedules",
                 columns: table => new
                 {
-                    ShowId = table.Column<int>(type: "int", nullable: false)
+                    ScheduleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ScreenId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShowTimeId = table.Column<int>(type: "int", nullable: false),
                     MovieId = table.Column<int>(type: "int", nullable: false),
+                    PremiumSeats = table.Column<int>(type: "int", nullable: false),
+                    EliteSeats = table.Column<int>(type: "int", nullable: false),
+                    AvailablePreSeats = table.Column<int>(type: "int", nullable: false),
+                    AvailableEliSeats = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Shows", x => x.ShowId);
+                    table.PrimaryKey("PK_Schedules", x => x.ScheduleId);
                     table.ForeignKey(
-                        name: "FK_Shows_Movies_MovieId",
+                        name: "FK_Schedules_Movies_MovieId",
                         column: x => x.MovieId,
                         principalTable: "Movies",
                         principalColumn: "MovieId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Shows_Screens_ScreenId",
+                        name: "FK_Schedules_Screens_ScreenId",
                         column: x => x.ScreenId,
                         principalTable: "Screens",
                         principalColumn: "ScreenId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Shows_ShowTimes_ShowTimeId",
+                        name: "FK_Schedules_ShowTimes_ShowTimeId",
                         column: x => x.ShowTimeId,
                         principalTable: "ShowTimes",
                         principalColumn: "ShowTimeId",
@@ -206,37 +169,18 @@ namespace PKTickets.Migrations
                     ReservationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    SeatId = table.Column<int>(type: "int", nullable: false),
-                    ShowId = table.Column<int>(type: "int", nullable: false),
-                    PayTypeId = table.Column<int>(type: "int", nullable: false),
+                    ScheduleId = table.Column<int>(type: "int", nullable: false),
                     NumberOfTickets = table.Column<int>(type: "int", nullable: false),
-                    FSBooked = table.Column<int>(type: "int", nullable: false),
-                    SSBooked = table.Column<int>(type: "int", nullable: false),
-                    TSBooked = table.Column<int>(type: "int", nullable: false),
-                    FOSBooked = table.Column<int>(type: "int", nullable: true),
-                    BSBooked = table.Column<int>(type: "int", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reservations", x => x.ReservationId);
                     table.ForeignKey(
-                        name: "FK_Reservations_PayTypes_PayTypeId",
-                        column: x => x.PayTypeId,
-                        principalTable: "PayTypes",
-                        principalColumn: "TypeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reservations_Seats_SeatId",
-                        column: x => x.SeatId,
-                        principalTable: "Seats",
-                        principalColumn: "SeatId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reservations_Shows_ShowId",
-                        column: x => x.ShowId,
-                        principalTable: "Shows",
-                        principalColumn: "ShowId",
+                        name: "FK_Reservations_Schedules_ScheduleId",
+                        column: x => x.ScheduleId,
+                        principalTable: "Schedules",
+                        principalColumn: "ScheduleId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reservations_Users_UserId",
@@ -247,19 +191,9 @@ namespace PKTickets.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_PayTypeId",
+                name: "IX_Reservations_ScheduleId",
                 table: "Reservations",
-                column: "PayTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservations_SeatId",
-                table: "Reservations",
-                column: "SeatId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservations_ShowId",
-                table: "Reservations",
-                column: "ShowId");
+                column: "ScheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_UserId",
@@ -267,24 +201,24 @@ namespace PKTickets.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Screens_TheaterId",
-                table: "Screens",
-                column: "TheaterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Shows_MovieId",
-                table: "Shows",
+                name: "IX_Schedules_MovieId",
+                table: "Schedules",
                 column: "MovieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Shows_ScreenId",
-                table: "Shows",
+                name: "IX_Schedules_ScreenId",
+                table: "Schedules",
                 column: "ScreenId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Shows_ShowTimeId",
-                table: "Shows",
+                name: "IX_Schedules_ShowTimeId",
+                table: "Schedules",
                 column: "ShowTimeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Screens_TheaterId",
+                table: "Screens",
+                column: "TheaterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
@@ -299,13 +233,7 @@ namespace PKTickets.Migrations
                 name: "Reservations");
 
             migrationBuilder.DropTable(
-                name: "PayTypes");
-
-            migrationBuilder.DropTable(
-                name: "Seats");
-
-            migrationBuilder.DropTable(
-                name: "Shows");
+                name: "Schedules");
 
             migrationBuilder.DropTable(
                 name: "Users");

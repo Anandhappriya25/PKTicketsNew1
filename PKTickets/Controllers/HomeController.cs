@@ -15,34 +15,31 @@ using PKTickets.Interfaces;
 using PKTickets.Models.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
-                                    
+
 namespace PKTickets.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUserRepository _userRepository;
-        private readonly IPayTypeRepository _payTypeRepository;
         private readonly ITheaterRepository _theaterRepository;
         private readonly IMovieRepository _movieRepository;
         private readonly IScreenRepository _screenRepository;
-        private readonly IShowRepository _seatRepository;
+        private readonly ISheduleRepository _seatRepository;
         private readonly IShowTimeRepository _showTimeRepository;
         private readonly IReservationRepository _reservationRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IWebHostEnvironment WebHostEnvironment;
 
 
-        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository,
-            IPayTypeRepository payTypeRepository, IMovieRepository movieRepository,
+        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository, IMovieRepository movieRepository,
             ITheaterRepository theaterRepository, IScreenRepository screenRepository,
-            IShowRepository seatRepository, IShowTimeRepository showTimeRepository,
+            ISheduleRepository seatRepository, IShowTimeRepository showTimeRepository,
             IReservationRepository reservationRepository, IRoleRepository roleRepository,
             IWebHostEnvironment _webHostEnvironment)
         {
             _logger = logger;
             _userRepository = userRepository;
-            _payTypeRepository = payTypeRepository;
             _movieRepository = movieRepository;
             _theaterRepository = theaterRepository;
             _screenRepository = screenRepository;
@@ -199,11 +196,6 @@ namespace PKTickets.Controllers
             return View(showTimesList);
         }
 
-        public IActionResult PayTypesList()
-        {
-            var paytypesList = _payTypeRepository.GetAllPayTypes();
-            return View(paytypesList);
-        }
         public IActionResult MoviesList()
         {
             var moviesList = _movieRepository.GetAllMovies();
@@ -235,7 +227,7 @@ namespace PKTickets.Controllers
             }
         }
         public IActionResult MovieDetails(int id)
-        { 
+        {
             return View(_movieRepository.MovieById(id));
         }
 

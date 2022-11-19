@@ -47,8 +47,8 @@ namespace PKTickets.Repository
             users.RoleId = user.RoleId;
             Messages messages = new Messages();
             messages.Success = false;
-            messages.Role=user.Role;
-            var phoneExist = db.Users.FirstOrDefault(x => x.PhoneNumber==user.PhoneNumber);
+            messages.Role = user.Role;
+            var phoneExist = db.Users.FirstOrDefault(x => x.PhoneNumber == user.PhoneNumber);
             var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == user.EmailId);
             if (phoneExist != null)
             {
@@ -65,7 +65,7 @@ namespace PKTickets.Repository
                 db.Users.Add(users);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = users.UserName+", Succssfully Registered the Account";
+                messages.Message = users.UserName + ", Succssfully Registered the Account";
                 return messages;
             }
         }
@@ -146,35 +146,35 @@ namespace PKTickets.Repository
         public LoginResultDTO GetLoginDetail(string emailId, string password)
         {
             var users = (from user in db.Users
-                             join role in db.Roles on user.RoleId equals role.RoleId
-                             where user.EmailId == emailId && user.Password == password
-                             select new LoginResultDTO()
-                             {
-                                 UserId = user.UserId,
-                                 PhoneNumber = user.PhoneNumber,
-                                 RoleName = role.RoleName,
-                                 EmailId = user.EmailId,
-                                 Name =user.UserName
-                             }).FirstOrDefault();
+                         join role in db.Roles on user.RoleId equals role.RoleId
+                         where user.EmailId == emailId && user.Password == password
+                         select new LoginResultDTO()
+                         {
+                             UserId = user.UserId,
+                             PhoneNumber = user.PhoneNumber,
+                             RoleName = role.RoleName,
+                             EmailId = user.EmailId,
+                             Name = user.UserName
+                         }).FirstOrDefault();
             return users;
         }
 
         public IEnumerable<UserDTO> UsersList()
         {
             var user = (from users in db.Users
-                            join role in db.Roles on users.RoleId equals role.RoleId
-                            //where role.RoleId == customers.RoleId
-                            select new UserDTO()
-                            {
-                                UserId = users.UserId,
-                                UserName = users.UserName,
-                                PhoneNumber = users.PhoneNumber,
-                                Location = users.Location,
-                                EmailId = users.EmailId,
-                                RoleName = role.RoleName
-                            }).ToList();
+                        join role in db.Roles on users.RoleId equals role.RoleId
+                        //where role.RoleId == customers.RoleId
+                        select new UserDTO()
+                        {
+                            UserId = users.UserId,
+                            UserName = users.UserName,
+                            PhoneNumber = users.PhoneNumber,
+                            Location = users.Location,
+                            EmailId = users.EmailId,
+                            RoleName = role.RoleName
+                        }).ToList();
             return user;
         }
-        
+
     }
 }

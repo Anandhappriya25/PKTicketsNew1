@@ -17,24 +17,21 @@ namespace PKTickets.Models
         [ForeignKey("TheaterId")]
         public Theater? Theater { get; set; }
 
-        [Required(ErrorMessage = "Please enter the FirstSection")]
-        [Range(10, 100, ErrorMessage = "FirstSection seats must be between 10 to 100")]
-        public int FirstSection { get; set; }
+        [Required(ErrorMessage = "Please enter the PremiumCapacity")]
+        [Range(10, 100, ErrorMessage = "PremiumCapacity must be between 10 to 100")]
+        public int PremiumCapacity { get; set; }
 
-        [Required(ErrorMessage = "Please enter the SecondSection")]
-        [Range(10, 100, ErrorMessage = "SecondSection seats must be between 10 to 100")]
-        public int SecondSection { get; set; }
+        [Required(ErrorMessage = "Please enter the EliteCapacity")]
+        [Range(10, 100, ErrorMessage = "EliteCapacity  must be between 10 to 100")]
+        public int EliteCapacity { get; set; }
 
-        [Required(ErrorMessage = "Please enter the SecondSection")]
-        [Range(10, 100, ErrorMessage = "SecondSection seats must be between 10 to 100")]
-        public int ThirdSection { get; set; }
+        [Required(ErrorMessage = "Please enter the PremiumPrice")]
+        [Range(100, 1000, ErrorMessage = "PremiumPrice  must be between 100 to 1000")]
+        public int PremiumPrice { get; set; }
 
-        [Range(10, 100, ErrorMessage = "FourthSection seats must be between 10 to 100")]
-        public int? FourthSection { get; set; } = 0;
-
-        [Range(10, 100, ErrorMessage = "BalconySection seats must be between 10 to 100")]
-        public int? BalconySection { get; set; } = 0;
-
+        [Required(ErrorMessage = "Please enter the ElitePrice")]
+        [Range(100, 1000, ErrorMessage = "ElitePrice  must be between 100 to 1000")]
+        public int ElitePrice { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

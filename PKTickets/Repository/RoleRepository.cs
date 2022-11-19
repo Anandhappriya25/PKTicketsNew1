@@ -18,7 +18,7 @@ namespace PKTickets.Repository
         {
             return db.Roles.Where(x => x.IsActive == true).ToList();
         }
-  
+
         public Role RoleById(int id)
         {
             var roleExist = db.Roles.Where(x => x.IsActive == true).FirstOrDefault(x => x.RoleId == id);
@@ -77,13 +77,13 @@ namespace PKTickets.Repository
             {
                 messages.Message = "Role Id is not found";
             }
-             else if (nameExist != null )
+            else if (nameExist != null)
             {
                 messages.Message = "Role Name is already registered";
             }
             else
             {
-                roleExist.RoleName= role.RoleName;
+                roleExist.RoleName = role.RoleName;
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "Role is succssfully Updated";

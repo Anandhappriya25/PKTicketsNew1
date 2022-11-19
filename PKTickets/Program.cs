@@ -28,11 +28,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITheaterRepository, TheaterRepository>();
-builder.Services.AddScoped<IPayTypeRepository, PayTypeRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IShowTimeRepository, ShowTimeRepository>();
 builder.Services.AddScoped<IScreenRepository, ScreenRepository>();
-builder.Services.AddScoped<IShowRepository, ShowRepository>();
+builder.Services.AddScoped<ISheduleRepository, SheduleRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 var app = builder.Build();

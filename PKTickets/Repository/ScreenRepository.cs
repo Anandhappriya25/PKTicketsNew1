@@ -16,7 +16,7 @@ namespace PKTickets.Repository
 
         public List<Screen> GetAllScreens()
         {
-            return db.Screens.Where(x=>x.IsActive==true).ToList();
+            return db.Screens.Where(x => x.IsActive == true).ToList();
         }
 
         public Screen ScreenById(int id)
@@ -30,18 +30,18 @@ namespace PKTickets.Repository
         {
             Messages messages = new Messages();
             messages.Success = false;
-            var theaterExist = db.Theaters.Where(x=>x.IsActive==true).FirstOrDefault(x=>x.TheaterId == screen.TheaterId);
-            if(theaterExist==null)
+            var theaterExist = db.Theaters.Where(x => x.IsActive == true).FirstOrDefault(x => x.TheaterId == screen.TheaterId);
+            if (theaterExist == null)
             {
                 messages.Message = "Theater Id is Not Registered.";
                 return messages;
             }
-            var totalScreens = GetAllScreens().Where(x => x.TheaterId == screen.TheaterId).ToList();
-            if(theaterExist.Screens>totalScreens.Count())
-            {
-                messages.Message = "Entered Theater Id is already added all Screens.";
-                return messages;
-            }
+            //var totalScreens = GetAllScreens().Where(x => x.TheaterId == screen.TheaterId).ToList();
+            //if (theaterExist.Screens > totalScreens.Count())
+            //{
+            //    messages.Message = "Entered Theater Id is already added all Screens.";
+            //    return messages;
+            //}
             else
             {
                 db.Screens.Add(screen);
@@ -64,7 +64,7 @@ namespace PKTickets.Repository
             }
             else
             {
-                ScreenExist.ScreenName= screen.ScreenName;
+                ScreenExist.ScreenName = screen.ScreenName;
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "Screen Name is succssfully Updated";
@@ -83,7 +83,7 @@ namespace PKTickets.Repository
             }
             else
             {
-                ScreenExist.IsActive=false;
+                ScreenExist.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "Screen is succssfully Deleted";
@@ -94,18 +94,18 @@ namespace PKTickets.Repository
         public List<TheaterScreensDTO> TheaterScreens(int id)
         {
             var screens = (from theater in db.Theaters
-                                  join screen in db.Screens on theater.TheaterId equals screen.TheaterId
-                                  where theater.TheaterId == id
-                                  select new TheaterScreensDTO()
-                                  {
-                                      ScreenId = screen.ScreenId,
-                                      ScreenName = screen.ScreenName,
-                                      FirstSection= screen.FirstSection,
-                                      SecondSection= screen.SecondSection,
-                                      ThirdSection= screen.ThirdSection,    
-                                      FourthSection= screen.FourthSection,  
-                                      BalconySection= screen.BalconySection,
-                                  }).ToList();
+                           join screen in db.Screens on theater.TheaterId equals screen.TheaterId
+                           where theater.TheaterId == id
+                           select new TheaterScreensDTO()
+                           {
+                               ScreenId = screen.ScreenId,
+                               ScreenName = screen.ScreenName,
+                               //FirstSection = screen.FirstSection,
+                               //SecondSection = screen.SecondSection,
+                               //ThirdSection = screen.ThirdSection,
+                               //FourthSection = screen.FourthSection,
+                               //BalconySection = screen.BalconySection,
+                           }).ToList();
 
             return screens;
         }

@@ -12,8 +12,8 @@ using PKTickets.Models;
 namespace PKTickets.Migrations
 {
     [DbContext(typeof(PKTicketsDbContext))]
-    [Migration("20221116103115_initir")]
-    partial class initir
+    [Migration("20221119051745_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,27 +72,6 @@ namespace PKTickets.Migrations
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("PKTickets.Models.PayType", b =>
-                {
-                    b.Property<int>("TypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TypeId"));
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("TypeId");
-
-                    b.ToTable("PayTypes");
-                });
-
             modelBuilder.Entity("PKTickets.Models.Reservation", b =>
                 {
                     b.Property<int>("ReservationId")
@@ -101,34 +80,13 @@ namespace PKTickets.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
 
-                    b.Property<int?>("BSBooked")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FOSBooked")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FSBooked")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<int>("NumberOfTickets")
                         .HasColumnType("int");
 
-                    b.Property<int>("PayTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SSBooked")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SeatId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShowId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TSBooked")
+                    b.Property<int>("ScheduleId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -136,11 +94,7 @@ namespace PKTickets.Migrations
 
                     b.HasKey("ReservationId");
 
-                    b.HasIndex("PayTypeId");
-
-                    b.HasIndex("SeatId");
-
-                    b.HasIndex("ShowId");
+                    b.HasIndex("ScheduleId");
 
                     b.HasIndex("UserId");
 
@@ -168,107 +122,33 @@ namespace PKTickets.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("PKTickets.Models.Screen", b =>
+            modelBuilder.Entity("PKTickets.Models.Schedule", b =>
                 {
-                    b.Property<int>("ScreenId")
+                    b.Property<int>("ScheduleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScreenId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleId"));
 
-                    b.Property<int?>("BalconySection")
+                    b.Property<int>("AvailableEliSeats")
                         .HasColumnType("int");
 
-                    b.Property<int>("FirstSection")
+                    b.Property<int>("AvailablePreSeats")
                         .HasColumnType("int");
-
-                    b.Property<int?>("FourthSection")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ScreenName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SecondSection")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TheaterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ThirdSection")
-                        .HasColumnType("int");
-
-                    b.HasKey("ScreenId");
-
-                    b.HasIndex("TheaterId");
-
-                    b.ToTable("Screens");
-                });
-
-            modelBuilder.Entity("PKTickets.Models.Seat", b =>
-                {
-                    b.Property<int>("SeatId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeatId"));
-
-                    b.Property<int?>("BSAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BSReserved")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FOSAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FOSReserved")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FSAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FSReserved")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SSAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SSReserved")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShowsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TSAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TSReserved")
-                        .HasColumnType("int");
-
-                    b.HasKey("SeatId");
-
-                    b.ToTable("Seats");
-                });
-
-            modelBuilder.Entity("PKTickets.Models.Show", b =>
-                {
-                    b.Property<int>("ShowId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowId"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("EliteSeats")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PremiumSeats")
                         .HasColumnType("int");
 
                     b.Property<int>("ScreenId")
@@ -277,7 +157,7 @@ namespace PKTickets.Migrations
                     b.Property<int>("ShowTimeId")
                         .HasColumnType("int");
 
-                    b.HasKey("ShowId");
+                    b.HasKey("ScheduleId");
 
                     b.HasIndex("MovieId");
 
@@ -285,7 +165,44 @@ namespace PKTickets.Migrations
 
                     b.HasIndex("ShowTimeId");
 
-                    b.ToTable("Shows");
+                    b.ToTable("Schedules");
+                });
+
+            modelBuilder.Entity("PKTickets.Models.Screen", b =>
+                {
+                    b.Property<int>("ScreenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScreenId"));
+
+                    b.Property<int>("EliteCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ElitePrice")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PremiumCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PremiumPrice")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ScreenName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TheaterId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ScreenId");
+
+                    b.HasIndex("TheaterId");
+
+                    b.ToTable("Screens");
                 });
 
             modelBuilder.Entity("PKTickets.Models.ShowTime", b =>
@@ -312,9 +229,6 @@ namespace PKTickets.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TheaterId"));
 
-                    b.Property<int?>("BalconyPrice")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -322,12 +236,6 @@ namespace PKTickets.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("NormalPrice")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Screens")
-                        .HasColumnType("int");
 
                     b.Property<string>("TheaterName")
                         .IsRequired()
@@ -386,21 +294,9 @@ namespace PKTickets.Migrations
 
             modelBuilder.Entity("PKTickets.Models.Reservation", b =>
                 {
-                    b.HasOne("PKTickets.Models.PayType", "PayType")
+                    b.HasOne("PKTickets.Models.Schedule", "Schedule")
                         .WithMany()
-                        .HasForeignKey("PayTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PKTickets.Models.Seat", "Seat")
-                        .WithMany()
-                        .HasForeignKey("SeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PKTickets.Models.Show", "Show")
-                        .WithMany()
-                        .HasForeignKey("ShowId")
+                        .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -410,27 +306,12 @@ namespace PKTickets.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PayType");
-
-                    b.Navigation("Seat");
-
-                    b.Navigation("Show");
+                    b.Navigation("Schedule");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PKTickets.Models.Screen", b =>
-                {
-                    b.HasOne("PKTickets.Models.Theater", "Theater")
-                        .WithMany()
-                        .HasForeignKey("TheaterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Theater");
-                });
-
-            modelBuilder.Entity("PKTickets.Models.Show", b =>
+            modelBuilder.Entity("PKTickets.Models.Schedule", b =>
                 {
                     b.HasOne("PKTickets.Models.Movie", "Movie")
                         .WithMany()
@@ -455,6 +336,17 @@ namespace PKTickets.Migrations
                     b.Navigation("Screen");
 
                     b.Navigation("ShowTime");
+                });
+
+            modelBuilder.Entity("PKTickets.Models.Screen", b =>
+                {
+                    b.HasOne("PKTickets.Models.Theater", "Theater")
+                        .WithMany()
+                        .HasForeignKey("TheaterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Theater");
                 });
 
             modelBuilder.Entity("PKTickets.Models.User", b =>

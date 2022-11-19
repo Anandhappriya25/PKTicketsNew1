@@ -83,17 +83,14 @@ namespace PKTickets.Repository
             {
                 messages.Message = "Theater Id is not found";
             }
-             else if (nameExist != null && nameExist.TheaterId != theaterExist.TheaterId)
+            else if (nameExist != null && nameExist.TheaterId != theaterExist.TheaterId)
             {
                 messages.Message = "Theater Name is already registered";
             }
             else
             {
-                theaterExist.TheaterName= theater.TheaterName;
-                theaterExist.NormalPrice = theater.NormalPrice;
-                theaterExist.BalconyPrice = theater.BalconyPrice;
+                theaterExist.TheaterName = theater.TheaterName;
                 theaterExist.Location = theater.Location;
-                theaterExist.Screens = theater.Screens;
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "Theater is succssfully Updated";

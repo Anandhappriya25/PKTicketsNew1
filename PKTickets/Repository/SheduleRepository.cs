@@ -6,47 +6,47 @@ using System.Xml.Linq;
 
 namespace PKTickets.Repository
 {
-    public class ShowRepository : IShowRepository
+    public class SheduleRepository : ISheduleRepository
     {
         private readonly PKTicketsDbContext db;
-        public ShowRepository(PKTicketsDbContext db)
+        public SheduleRepository(PKTicketsDbContext db)
         {
             this.db = db;
         }
 
-        public List<Show> ShowsList()
+        public List<Schedule> ShowsList()
         {
-            DateTime date=DateTime.Now;
+            DateTime date = DateTime.Now;
             TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
-            var time2=Convert.ToString(time);
+            var time2 = Convert.ToString(time);
             var time3 = TimingConvert.ConvertToInt(time2);
-            var list= db.Shows.Where(x => x.IsActive == true).Where(x => x.Date == date.Date).ToList();
-            var showList = new List<Show>();
-            foreach (Show movie in list)
+            var list = db.Schedules.Where(x => x.IsActive == true).Where(x => x.Date == date.Date).ToList();
+            var showList = new List<Schedule>();
+            foreach (Schedule movie in list)
             {
                 var times = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == movie.ShowTimeId);
-              if(times.ShowTiming>= time3)
+                if (times.ShowTiming >= time3)
                 {
-                  showList.Add(movie);
+                    showList.Add(movie);
                 }
             }
             return showList;
         }
 
-        public Show ShowById(int id)
+        public Schedule ShowById(int id)
         {
-            var show = db.Shows.Where(x => x.IsActive == true).FirstOrDefault(x => x.ShowId==id);
+            var show = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == id);
             return show;
         }
 
-        public List<Show> ShowsByMovieId(int id)
+        public List<Schedule> ShowsByMovieId(int id)
         {
 
             var show = ShowsList().Where(x => x.MovieId == id).ToList();
             return show;
         }
 
-       
+
         public Messages DeleteShow(int id)
         {
             Messages messages = new Messages();
@@ -58,7 +58,7 @@ namespace PKTickets.Repository
             }
             else
             {
-                showExist.IsActive=false;
+                showExist.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "The Show is Removed";
@@ -66,17 +66,17 @@ namespace PKTickets.Repository
             return messages;
         }
 
-        public Messages CreateShow(Show show)
+        public Messages CreateShow(Schedule show)
         {
             Messages messages = new Messages();
             messages.Success = false;
             DateTime date = DateTime.Now;
-            if(show.Date<date)
+            if (show.Date < date)
             {
                 messages.Message = "The date you are entered Is wrong.";
                 return messages;
             }
-            var currentMovieExist = ShowsByMovieId(show.MovieId).Where(x=>x.ScreenId== show.ScreenId).Where
+            var currentMovieExist = ShowsByMovieId(show.MovieId).Where(x => x.ScreenId == show.ScreenId).Where
                 (x => x.Date == show.Date).FirstOrDefault(x => x.ShowTimeId == show.ShowTimeId);
             if (currentMovieExist != null)
             {
@@ -84,7 +84,7 @@ namespace PKTickets.Repository
             }
             else
             {
-                db.Shows.Add(show);
+                db.Schedules.Add(show);
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "Show Is added Successfully";
@@ -92,30 +92,29 @@ namespace PKTickets.Repository
             return messages;
         }
 
-        public Messages UpdateShow(Show show)
+        public Messages UpdateShow(Schedule show)
         {
             Messages messages = new Messages();
             messages.Success = false;
-            var showExist = ShowById(show.ShowId);
+            var showExist = ShowById(show.ScheduleId);
             if (showExist == null)
             {
                 messages.Message = "The Show Id is not found";
                 return messages;
             }
-            var reserved = db.Seats.FirstOrDefault(x => x.ShowsId == show.ShowId);
-            if (reserved != null)
-            {
-                messages.Message = "The Show is already  Reserved so can not update ";
-            }
+            //var reserved = db.Seats.FirstOrDefault(x => x.ShowsId == show.ShowId);
+            //if (reserved != null)
+            //{
+            //    messages.Message = "The Show is already  Reserved so can not update ";
+            //}
             else
             {
-                showExist.MovieId = show.MovieId;
-                db.SaveChanges();
-                messages.Success = true;
-                messages.Message = "The Show is succssfully Updated";
+                    showExist.MovieId = show.MovieId;
+                    db.SaveChanges();
+                    messages.Success = true;
+                    messages.Message = "The Show is succssfully Updated";
             }
-            return messages;
+                return messages;
         }
-
     }
 }

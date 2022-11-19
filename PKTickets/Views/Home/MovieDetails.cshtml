@@ -1,12 +1,71 @@
-﻿@using PKTickets.Models
+﻿@*@using PKTickets.Models
 @model Movie
 
-<div>
+
+
     <a class="btn btn-warning" asp-area="" asp-controller="Home" asp-action="MoviesList">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
         </svg>
         Back to List
     </a>
-</div>
 
+        <div class="container border rounded-3  pt-3 pb-3 bg-dark text-light col-6" >
+        <div class="text-center">
+            <img src="/css/Image/@Model.ImagePath"
+                 style="width: 50%;" alt="logo">
+        </div>
+        <div class="mb-3 row "></div>
+        <div class="mb-3 row ">
+           <h4>
+                <div class="text-center">
+                    @Model.Title
+                    </div>
+            </h4>
+        </div>
+        <div class="mb-3 row ">
+            <h5>
+                <div>
+                    Director: @Model.Director
+                </div>
+            </h5>
+        </div>
+        <div class="mb-3 row ">
+            <h5>
+                <div>
+                    Language: @Model.Language
+                </div>
+            </h5>
+        </div>
+        <div class="mb-3 row ">
+            <h5>
+                <div>
+                    Duration: @Model.Duration  minutes
+                </div>
+            </h5>
+        </div>
+         <div class="mb-3 row ">
+            <h5>
+                <div>
+                    Cast And Crew: @Model.CastAndCrew
+                </div>
+            </h5>
+        </div>
+        <div class="mb-3 row ">
+            <h5>
+                <div>
+                    Genre: @Model.Genre
+                </div>
+            </h5>
+        </div>
+    <div class="mb-5 row ">
+        
+            <div class="col-2">
+            <button type="submit" class="btn btn-outline-primary">BookTicket</button>
+            </div>
+     
+    </div>
+
+</div>
+    
+*@

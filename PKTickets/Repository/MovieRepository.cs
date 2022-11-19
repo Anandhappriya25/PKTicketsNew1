@@ -72,7 +72,7 @@ namespace PKTickets.Repository
         {
             Messages messages = new Messages();
             messages.Success = false;
-            var movieExist = db.Movies.Where(x => x.Title == dub.Title).FirstOrDefault(x=>x.Director==dub.Director);
+            var movieExist = db.Movies.Where(x => x.Title == dub.Title).FirstOrDefault(x => x.Director == dub.Director);
             if (movieExist == null)
             {
                 messages.Message = "Movie Title and Director Name is Not Registered.";
@@ -89,7 +89,7 @@ namespace PKTickets.Repository
                 Movie movie = new Movie();
                 movie.Title = movieExist.Title;
                 movie.Language = dub.Language;
-                movie.Duration=movieExist.Duration;
+                movie.Duration = movieExist.Duration;
                 movie.Genre = movieExist.Genre;
                 movie.Director = movieExist.Director;
                 movie.CastAndCrew = movieExist.CastAndCrew;
@@ -99,7 +99,7 @@ namespace PKTickets.Repository
                 messages.Message = "Movie is succssfully Dubbed";
                 return messages;
             }
-           
+
         }
 
         public Messages DeleteMovie(int movieId)
@@ -168,16 +168,16 @@ namespace PKTickets.Repository
                 messages.Message = "Movie Id is Not Registered.";
                 return messages;
             }
-            var movies=MovieByTitle(movieExist.Title).Where(x=>x.CastAndCrew==movie.CastAndCrew).ToList();
+            var movies = MovieByTitle(movieExist.Title).Where(x => x.CastAndCrew == movie.CastAndCrew).ToList();
             if (movies.Count > 1)
             {
-                movies.ForEach(c => 
-                { 
+                movies.ForEach(c =>
+                {
                     c.Title = movie.Title;
                     c.Duration = movie.Duration;
                     c.Genre = movie.Genre;
                     c.CastAndCrew = movie.CastAndCrew;
-                    c.Director= movie.Director;
+                    c.Director = movie.Director;
                 });
                 db.UpdateRange(movies);
                 db.SaveChanges();

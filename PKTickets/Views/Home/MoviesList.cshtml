@@ -52,16 +52,17 @@
         })
     </script>
 }*@
-<div class="container-fluid p-5">
+<div class="container p-5">
     <div class="row row-cols-4 row-cols-sm-4 row-cols-md-4 row-cols-lg-4">
   
      @foreach (Movie movie in Model)
     {
-        
-  
-               <div class="pt-3 pb-3 "> <a class="nav-link" asp-controller="Home" asp-action="" asp-route-id="@movie.MovieId">
+
+        <div style="margin: 3px 0px 28px">
+            <div class="pt-3 pb-3 " style="border-style:groove ;border-width:1px; border-color:#ddd;">
+                    <a class="nav-link" asp-controller="Home" asp-action="MovieDetails" asp-route-id="@movie.MovieId">
                 <img width="250px" height="350px" src="/css/Image/@movie.ImagePath">
-                </a><div class="container text-center"><h3>@movie.Title</h3> </div>
+                </a><div class="container text-center"><h5>@movie.Title</h5> </div></div>
        </div>
             
         }

@@ -36,12 +36,6 @@ namespace PKTickets.Repository
                 messages.Message = "Theater Id is Not Registered.";
                 return messages;
             }
-            //var totalScreens = GetAllScreens().Where(x => x.TheaterId == screen.TheaterId).ToList();
-            //if (theaterExist.Screens > totalScreens.Count())
-            //{
-            //    messages.Message = "Entered Theater Id is already added all Screens.";
-            //    return messages;
-            //}
             else
             {
                 db.Screens.Add(screen);
@@ -65,6 +59,8 @@ namespace PKTickets.Repository
             else
             {
                 ScreenExist.ScreenName = screen.ScreenName;
+                ScreenExist.ElitePrice=screen.ElitePrice;
+                ScreenExist.PremiumPrice = screen.PremiumPrice;
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "Screen Name is succssfully Updated";
@@ -91,20 +87,19 @@ namespace PKTickets.Repository
             }
         }
 
-        public List<TheaterScreensDTO> TheaterScreens(int id)
+        public List<Screen> TheaterScreens(int id)
         {
             var screens = (from theater in db.Theaters
                            join screen in db.Screens on theater.TheaterId equals screen.TheaterId
                            where theater.TheaterId == id
-                           select new TheaterScreensDTO()
+                           select new Screen()
                            {
                                ScreenId = screen.ScreenId,
                                ScreenName = screen.ScreenName,
-                               //FirstSection = screen.FirstSection,
-                               //SecondSection = screen.SecondSection,
-                               //ThirdSection = screen.ThirdSection,
-                               //FourthSection = screen.FourthSection,
-                               //BalconySection = screen.BalconySection,
+                               PremiumPrice = screen.PremiumPrice,
+                               ElitePrice = screen.ElitePrice,
+                               PremiumCapacity = screen.PremiumCapacity,
+                               EliteCapacity = screen.EliteCapacity,
                            }).ToList();
 
             return screens;

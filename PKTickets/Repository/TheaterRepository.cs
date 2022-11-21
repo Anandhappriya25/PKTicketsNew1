@@ -42,7 +42,7 @@ namespace PKTickets.Repository
             var theater = TheaterById(theaterId);
             if (theater == null)
             {
-                messages.Message = "Theater Id is not found";
+                messages.Message = "Theater Id  ("+ theaterId + ") is not found";
             }
             else
             {
@@ -61,7 +61,7 @@ namespace PKTickets.Repository
             var theaterExist = db.Theaters.FirstOrDefault(x => x.TheaterName == theater.TheaterName);
             if (theaterExist != null)
             {
-                messages.Message = "Theater Name is already Registered.";
+                messages.Message = "Theater Name ("+ theater.TheaterName + ") is already Registered.";
             }
             else
             {
@@ -81,11 +81,11 @@ namespace PKTickets.Repository
             var nameExist = db.Theaters.FirstOrDefault(x => x.TheaterName == theater.TheaterName);
             if (theaterExist == null)
             {
-                messages.Message = "Theater Id is not found";
+                messages.Message = "Theater Id("+ theater.TheaterId + ") is not found";
             }
             else if (nameExist != null && nameExist.TheaterId != theaterExist.TheaterId)
             {
-                messages.Message = "Theater Name is already registered";
+                messages.Message = "Theater Name ("+ theater.TheaterName + ")is already registered";
             }
             else
             {

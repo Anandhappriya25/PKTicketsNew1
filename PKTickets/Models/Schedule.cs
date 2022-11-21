@@ -27,17 +27,14 @@ namespace PKTickets.Models
         [ForeignKey("MovieId")]
         public Movie? Movie { get; set; }
 
-        [Required(ErrorMessage = "Please enter the PremiumSeats")]
-        [Range(10, 100, ErrorMessage = "PremiumSeats  must be between 10 to 100")]
+    
         public int PremiumSeats { get; set; }
 
-        [Required(ErrorMessage = "Please enter the EliteSeats")]
-        [Range(10, 100, ErrorMessage = "EliteSeats  must be between 10 to 100")]
         public int EliteSeats { get; set; }
 
-        public int AvailablePreSeats { get; set; } = 0;
+        public int AvailablePreSeats { get; set; } 
 
-        public int AvailableEliSeats { get; set; } = 0;
+        public int AvailableEliSeats { get; set; } 
         public bool IsActive { get; set; } = true;
 
     }

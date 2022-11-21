@@ -47,7 +47,6 @@ namespace PKTickets.Repository
             users.RoleId = user.RoleId;
             Messages messages = new Messages();
             messages.Success = false;
-            messages.Role = user.Role;
             var phoneExist = db.Users.FirstOrDefault(x => x.PhoneNumber == user.PhoneNumber);
             var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == user.EmailId);
             if (phoneExist != null)
@@ -65,7 +64,7 @@ namespace PKTickets.Repository
                 db.Users.Add(users);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = users.UserName + ", Succssfully Registered the Account";
+                messages.Message = users.UserName + " , Succssfully Registered the Account";
                 return messages;
             }
         }
@@ -77,7 +76,7 @@ namespace PKTickets.Repository
             var user = UserById(userId);
             if (user == null)
             {
-                messages.Message = "User Id is not found";
+                messages.Message = "User Id ("+userId + ") is not found";
                 return messages;
             }
             else
@@ -103,7 +102,6 @@ namespace PKTickets.Repository
         {
             Messages messages = new Messages();
             messages.Success = false;
-            messages.Role = userDTO.Role;
             User users = new User();
             users.UserName = userDTO.UserName;
             users.PhoneNumber = userDTO.PhoneNumber;
@@ -116,17 +114,17 @@ namespace PKTickets.Repository
             var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == userDTO.EmailId);
             if (userExist == null)
             {
-                messages.Message = "User Id is not found";
+                messages.Message = "User Id ("+userDTO.UserId + ") is not found";
                 return messages;
             }
             else if (phoneExist != null && phoneExist.UserId != userExist.UserId)
             {
-                messages.Message = "Phone Number is already registered";
+                messages.Message = "Phone Number  ("+userDTO.PhoneNumber + ")is already registered";
                 return messages;
             }
             else if (emailIdExist != null && emailIdExist.UserId != userExist.UserId)
             {
-                messages.Message = "EmailId is already registered";
+                messages.Message = "EmailId  ("+userDTO.UserId +")is already registered";
                 return messages;
             }
             else

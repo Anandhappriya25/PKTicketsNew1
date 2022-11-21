@@ -17,7 +17,7 @@ namespace PKTickets.Repository
         public List<Schedule> ShowsList()
         {
             DateTime date = DateTime.Now;
-            TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
+            TimeSpan time = new TimeSpan(date.Hour, date.Minute,0);
             var time2 = Convert.ToString(time);
             var time3 = TimingConvert.ConvertToInt(time2);
             var list = db.Schedules.Where(x => x.IsActive == true).Where(x => x.Date == date.Date).ToList();
@@ -25,7 +25,15 @@ namespace PKTickets.Repository
             foreach (Schedule movie in list)
             {
                 var times = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == movie.ShowTimeId);
-                if (times.ShowTiming >= time3)
+                if (times.ShowTiming > time3)
+                {
+                    showList.Add(movie);
+                }
+            }
+            var list2 = db.Schedules.Where(x => x.IsActive == true).Where(x => x.Date > date.Date).ToList();
+            if(list2.Count()>0)
+            {
+                foreach (Schedule movie in list2)
                 {
                     showList.Add(movie);
                 }
@@ -70,6 +78,12 @@ namespace PKTickets.Repository
         {
             Messages messages = new Messages();
             messages.Success = false;
+            var screen=db.Screens.Where(x=>x.IsActive==true).FirstOrDefault(x => x.ScreenId == show.ScreenId);
+            if (screen == null)
+            {
+                messages.Message = "The Screen Id You Entered is wrong";
+                return messages;
+            }
             DateTime date = DateTime.Now;
             if (show.Date < date)
             {
@@ -84,6 +98,10 @@ namespace PKTickets.Repository
             }
             else
             {
+                show.PremiumSeats = screen.PremiumCapacity;
+                show.EliteSeats = screen.EliteCapacity;
+                show.AvailablePreSeats = screen.PremiumCapacity;
+                show.AvailableEliSeats = screen.EliteCapacity;
                 db.Schedules.Add(show);
                 db.SaveChanges();
                 messages.Success = true;

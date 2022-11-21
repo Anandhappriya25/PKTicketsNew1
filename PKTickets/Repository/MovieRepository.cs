@@ -68,40 +68,7 @@ namespace PKTickets.Repository
             }
         }
 
-        public Messages DubMovie(DubDTO dub)
-        {
-            Messages messages = new Messages();
-            messages.Success = false;
-            var movieExist = db.Movies.Where(x => x.Title == dub.Title).FirstOrDefault(x => x.Director == dub.Director);
-            if (movieExist == null)
-            {
-                messages.Message = "Movie Title and Director Name is Not Registered.";
-                return messages;
-            }
-            var dubExist = MovieByTitle(dub.Title).FirstOrDefault(x => x.Language == dub.Language);
-            if (dubExist != null)
-            {
-                messages.Message = "Movie is already Dubbed to this Language.";
-                return messages;
-            }
-            else
-            {
-                Movie movie = new Movie();
-                movie.Title = movieExist.Title;
-                movie.Language = dub.Language;
-                movie.Duration = movieExist.Duration;
-                movie.Genre = movieExist.Genre;
-                movie.Director = movieExist.Director;
-                movie.CastAndCrew = movieExist.CastAndCrew;
-                db.Movies.Add(movie);
-                db.SaveChanges();
-                messages.Success = true;
-                messages.Message = "Movie is succssfully Dubbed";
-                return messages;
-            }
-
-        }
-
+       
         public Messages DeleteMovie(int movieId)
         {
             Messages messages = new Messages();
@@ -147,6 +114,7 @@ namespace PKTickets.Repository
             else
             {
                 movieExist.Language = movie.Language;
+                movieExist.Director = movie.Director;
                 movieExist.Title = movie.Title;
                 movieExist.Duration = movie.Duration;
                 movieExist.Genre = movie.Genre;
@@ -158,45 +126,6 @@ namespace PKTickets.Repository
             }
         }
 
-        public Messages DubMovieUpdate(Movie movie)
-        {
-            Messages messages = new Messages();
-            messages.Success = false;
-            var movieExist = MovieById(movie.MovieId);
-            if (movieExist == null)
-            {
-                messages.Message = "Movie Id is Not Registered.";
-                return messages;
-            }
-            var movies = MovieByTitle(movieExist.Title).Where(x => x.CastAndCrew == movie.CastAndCrew).ToList();
-            if (movies.Count > 1)
-            {
-                movies.ForEach(c =>
-                {
-                    c.Title = movie.Title;
-                    c.Duration = movie.Duration;
-                    c.Genre = movie.Genre;
-                    c.CastAndCrew = movie.CastAndCrew;
-                    c.Director = movie.Director;
-                });
-                db.UpdateRange(movies);
-                db.SaveChanges();
-                //foreach (Movie dubMovie in movies)
-                //{
-                //    dubMovie.Title = movie.Title;
-                //    dubMovie.Duration = movie.Duration;
-                //    dubMovie.Genre = movie.Genre;
-                //    dubMovie.CastAndCrew = movie.CastAndCrew;
-                //}   
-                messages.Success = true;
-                messages.Message = "Movie is succssfully updated";
-                return messages;
-            }
-            else
-            {
-                messages.Message = "Movie is Not Dubbed.";
-                return messages;
-            }
-        }
+     
     }
 }

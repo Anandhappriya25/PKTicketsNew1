@@ -36,15 +36,8 @@ namespace PKTickets.Repository
             return userExist;
         }
 
-        public Messages CreateUser(UserDTO user)
+        public Messages CreateUser(User user)
         {
-            User users = new User();
-            users.UserName = user.UserName;
-            users.PhoneNumber = user.PhoneNumber;
-            users.Location = user.Location;
-            users.EmailId = user.EmailId;
-            users.Password = user.Password;
-            users.RoleId = user.RoleId;
             Messages messages = new Messages();
             messages.Success = false;
             var phoneExist = db.Users.FirstOrDefault(x => x.PhoneNumber == user.PhoneNumber);
@@ -61,10 +54,10 @@ namespace PKTickets.Repository
             }
             else
             {
-                db.Users.Add(users);
+                db.Users.Add(user);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = users.UserName + " , Succssfully Registered the Account";
+                messages.Message = user.UserName + " , Succssfully Registered the Account";
                 return messages;
             }
         }
@@ -88,27 +81,12 @@ namespace PKTickets.Repository
                 return messages;
             }
         }
-        public Role GetRoleById(int id)
-        {
-            return db.Roles.Find(id);
-        }
+        
 
-        public List<Role> GetAllRole()
-        {
-            return db.Roles.ToList();
-        }
-
-        public Messages UpdateUser(UserDTO userDTO)
+        public Messages UpdateUser(User userDTO)
         {
             Messages messages = new Messages();
             messages.Success = false;
-            User users = new User();
-            users.UserName = userDTO.UserName;
-            users.PhoneNumber = userDTO.PhoneNumber;
-            users.Location = userDTO.Location;
-            users.EmailId = userDTO.EmailId;
-            users.Password = userDTO.Password;
-            users.RoleId = userDTO.RoleId;
             var userExist = UserById(userDTO.UserId);
             var phoneExist = db.Users.FirstOrDefault(x => x.PhoneNumber == userDTO.PhoneNumber);
             var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == userDTO.EmailId);
@@ -134,45 +112,13 @@ namespace PKTickets.Repository
                 userExist.EmailId = userDTO.EmailId;
                 userExist.Password = userDTO.Password;
                 userExist.Location = userDTO.Location;
-                userExist.RoleId = userDTO.RoleId;
                 db.SaveChanges();
                 messages.Success = true;
                 messages.Message = "User is succssfully updated";
                 return messages;
             }
         }
-        public LoginResultDTO GetLoginDetail(string emailId, string password)
-        {
-            var users = (from user in db.Users
-                         join role in db.Roles on user.RoleId equals role.RoleId
-                         where user.EmailId == emailId && user.Password == password
-                         select new LoginResultDTO()
-                         {
-                             UserId = user.UserId,
-                             PhoneNumber = user.PhoneNumber,
-                             RoleName = role.RoleName,
-                             EmailId = user.EmailId,
-                             Name = user.UserName
-                         }).FirstOrDefault();
-            return users;
-        }
-
-        public IEnumerable<UserDTO> UsersList()
-        {
-            var user = (from users in db.Users
-                        join role in db.Roles on users.RoleId equals role.RoleId
-                        //where role.RoleId == customers.RoleId
-                        select new UserDTO()
-                        {
-                            UserId = users.UserId,
-                            UserName = users.UserName,
-                            PhoneNumber = users.PhoneNumber,
-                            Location = users.Location,
-                            EmailId = users.EmailId,
-                            RoleName = role.RoleName
-                        }).ToList();
-            return user;
-        }
+       
 
     }
 }

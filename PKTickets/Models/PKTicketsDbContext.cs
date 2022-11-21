@@ -10,7 +10,6 @@ namespace PKTickets.Models
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Theater> Theaters { get; set; }
         public DbSet<Screen> Screens { get; set; }

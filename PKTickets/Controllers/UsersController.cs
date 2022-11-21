@@ -22,12 +22,7 @@ namespace PKTickets.Controllers
         [HttpGet("GetUserList")]
         public IActionResult GetUserList()
         {
-            var user = userRepository.GetAllUsers();
-            if (user.Count() == 0)
-            {
-                throw new Exception("The User list is empty");
-            }
-            return Ok(user);
+            return Ok(userRepository.GetAllUsers());
         }
 
         [HttpGet("UserById/{userId}")]
@@ -45,14 +40,14 @@ namespace PKTickets.Controllers
 
         [HttpPost("CreateUser")]
 
-        public IActionResult CreateUser(UserDTO user)
+        public IActionResult CreateUser(User user)
         {
             return Ok(userRepository.CreateUser(user));
         }
 
 
         [HttpPut("UpdateUser")]
-        public ActionResult UpdateUser(UserDTO user)
+        public ActionResult UpdateUser(User user)
         {
             return Ok(userRepository.UpdateUser(user));
         }

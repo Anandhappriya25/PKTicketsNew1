@@ -18,7 +18,7 @@ namespace PKTickets.Models
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Please Enter the EmailId !!!")]
-        [EmailAddress(ErrorMessage = "Enter valid Email Id")]
+        [RegularExpression("^[a-z0-9](\\.?[a-z0-9]){5,}@g(oogle)?mail\\.com$")]
         public string EmailId { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
@@ -30,10 +30,6 @@ namespace PKTickets.Models
         [StringLength(20, ErrorMessage = "Location length must be below 20 characters")]
         public string Location { get; set; }
 
-        [Required(ErrorMessage = "Please Enter the Role Id !!!")]
-        public  int RoleId { get; set; }
-        [ForeignKey("RoleId")]
-        public  Role? Role { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

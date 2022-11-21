@@ -12,10 +12,8 @@ namespace PKTickets.Interfaces
         public List<Movie> MovieByLanguage(string language);
         public List<Movie> MovieByDirector(string language);
         public Messages CreateMovie(Movie movie);
-        public Messages DubMovie(DubDTO dub);
         public Messages DeleteMovie(int movieId);
         public Messages UpdateMovie(Movie movie);
-        public Messages DubMovieUpdate(Movie movie);
 
     }
 }

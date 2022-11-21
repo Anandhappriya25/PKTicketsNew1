@@ -86,17 +86,5 @@ namespace PKTickets.Controllers
         {
             return Ok(movieRepository.DeleteMovie(movieId));
         }
-
-        [HttpPost("DubMovie")]
-        public ActionResult DubMovie(DubDTO movie)
-        {
-            return Ok(movieRepository.DubMovie(movie));
-        }
-
-        [HttpPut("DubMovieUpdate")]
-        public ActionResult DubMovieUpdate(Movie movie)
-        {
-            return Ok(movieRepository.DubMovieUpdate(movie));
-        }
     }
 }

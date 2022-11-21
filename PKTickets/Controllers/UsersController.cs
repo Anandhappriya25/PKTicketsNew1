@@ -32,7 +32,7 @@ namespace PKTickets.Controllers
             var user = userRepository.UserById(userId);
             if (user == null)
             {
-                throw new Exception("The User Id is not found");
+                return NotFound();
             }
             return Ok(user);
         }

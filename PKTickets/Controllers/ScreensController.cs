@@ -22,12 +22,7 @@ namespace PKTickets.Controllers
         [HttpGet("GetScreensList")]
         public IActionResult GetScreensList()
         {
-            var screens = screenRepository.GetAllScreens();
-            if (screens.Count() == 0)
-            {
-                throw new Exception("The Screens list is empty");
-            }
-            return Ok(screens);
+            return Ok(screenRepository.GetAllScreens());
         }
 
         [HttpGet("ScreenById/{screenId}")]
@@ -37,7 +32,7 @@ namespace PKTickets.Controllers
             var screen = screenRepository.ScreenById(screenId);
             if (screen == null)
             {
-                throw new Exception("The Screen Id is not found");
+               return NotFound();
             }
             return Ok(screen);
         }
@@ -68,12 +63,7 @@ namespace PKTickets.Controllers
         [HttpGet("GetScreensByTheaterId/{id}")]
         public IActionResult GetScreensByTheaterId(int id)
         {
-            var screens = screenRepository.TheaterScreens(id);
-            if (screens.Count() == 0)
-            {
-                throw new Exception("This Theater Does Not added any Screens yet");
-            }
-            return Ok(screens);
+            return Ok(screenRepository.TheaterScreens(id));
         }
 
     }

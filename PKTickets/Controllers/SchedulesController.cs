@@ -23,14 +23,7 @@ namespace PKTickets.Controllers
         [HttpGet("SchedulesList")]
         public IActionResult SchedulesList()
         {
-            var shows = showRepository.SchedulesList();
-            if (shows.Count() == 0)
-            {
-                Messages messages = new Messages();
-                messages.Message = "The Schedule List is empty";
-                return Ok(messages.Message);
-            }
-            return Ok(shows);
+            return Ok(showRepository.SchedulesList());
         }
 
         [HttpGet("ScheduleById/{id}")]
@@ -40,9 +33,7 @@ namespace PKTickets.Controllers
             var show = showRepository.ScheduleById(id);
             if (show == null)
             {
-                Messages messages = new Messages();
-                messages.Message = "The Schedule Id is not found";
-                return Ok(messages.Message);
+                return NotFound();
             }
             return Ok(show);
         }
@@ -50,14 +41,7 @@ namespace PKTickets.Controllers
         [HttpGet("SchedulesByMovieId/{id}")]
         public IActionResult SchedulesByMovieId(int id)
         {
-            var shows = showRepository.SchedulesByMovieId(id);
-            if (shows.Count() == 0)
-            {
-                Messages messages = new Messages();
-                messages.Message = "The given  Id  Schedule list is empty";
-                return Ok(messages.Message);
-            }
-            return Ok(shows);
+            return Ok(showRepository.SchedulesByMovieId(id));
         }
 
 

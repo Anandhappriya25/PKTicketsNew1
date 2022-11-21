@@ -22,23 +22,13 @@ namespace PKTickets.Controllers
         [HttpGet("ReservationList")]
         public IActionResult ReservationList()
         {
-            var reservation = reservationRepository.ReservationList();
-            if (reservation.Count() == 0)
-            {
-                throw new Exception("The Reservation list is empty");
-            }
-            return Ok(reservation);
+            return Ok(reservationRepository.ReservationList());
         }
 
-        [HttpGet("ReservationsByShowId")]
-        public IActionResult ReservationsByShowId(int id)
+        [HttpGet("ReservationsByScheduleId")]
+        public IActionResult ReservationsByScheduleId(int id)
         {
-            var reservation = reservationRepository.ReservationsByShowId(id);
-            if (reservation.Count() == 0)
-            {
-                throw new Exception("The Reservation list is empty for this Show");
-            }
-            return Ok(reservation);
+            return Ok(reservationRepository.ReservationsByShowId(id));
         }
 
         [HttpGet("ReservationById/{id}")]
@@ -48,7 +38,7 @@ namespace PKTickets.Controllers
             var reservation = reservationRepository.ReservationById(id);
             if (reservation == null)
             {
-                throw new Exception("The Reservation Id is not found");
+               return NotFound();
             }
             return Ok(reservation);
         }
@@ -75,5 +65,10 @@ namespace PKTickets.Controllers
         {
             return Ok(reservationRepository.DeleteReservation(id));
         }
+        //[HttpGet("ReservationsByUserId")]
+        //public IActionResult ReservationsByUserId(int id)
+        //{
+        //    return Ok(reservationRepository.ReservationsByShowId(id));
+        //}
     }
 }

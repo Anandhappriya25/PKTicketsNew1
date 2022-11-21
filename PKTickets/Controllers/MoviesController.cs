@@ -22,34 +22,19 @@ namespace PKTickets.Controllers
         [HttpGet("GetMoviesList")]
         public IActionResult GetMoviesList()
         {
-            var movies = movieRepository.GetAllMovies();
-            if (movies.Count() == 0)
-            {
-                throw new Exception("The Movie list is empty");
-            }
-            return Ok(movies);
+            return Ok(movieRepository.GetAllMovies());
         }
 
         [HttpGet("GetMoviesByTitle/{title}")]
         public IActionResult GetMoviesByTitle(string title)
         {
-            var movies = movieRepository.MovieByTitle(title);
-            if (movies.Count() == 0)
-            {
-                throw new Exception("The Movie Title list is empty");
-            }
-            return Ok(movies);
+            return Ok(movieRepository.MovieByTitle(title));
         }
 
         [HttpGet("GetMoviesByGenre/{Genre}")]
         public IActionResult MovieByGenre(string title)
         {
-            var movies = movieRepository.MovieByTitle(title);
-            if (movies.Count() == 0)
-            {
-                throw new Exception("The Movie Genre list is empty");
-            }
-            return Ok(movies);
+            return Ok(movieRepository.MovieByTitle(title));
         }
 
         [HttpGet("MovieById/{movieId}")]
@@ -59,7 +44,7 @@ namespace PKTickets.Controllers
             var movie = movieRepository.MovieById(movieId);
             if (movie == null)
             {
-                throw new Exception("The Movie Id is not found");
+                return NotFound();
             }
             return Ok(movie);
         }

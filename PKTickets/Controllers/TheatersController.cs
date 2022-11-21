@@ -21,12 +21,7 @@ namespace PKTickets.Controllers
         [HttpGet("GetTheaterList")]
         public IActionResult GetTheaterList()
         {
-            var theaters = theaterRepository.GetTheaters();
-            if (theaters.Count() == 0)
-            {
-                throw new Exception("The Theater list is empty");
-            }
-            return Ok(theaters);
+            return Ok(theaterRepository.GetTheaters());
         }
 
         [HttpGet("TheaterById/{theaterId}")]
@@ -36,7 +31,7 @@ namespace PKTickets.Controllers
             var theater = theaterRepository.TheaterById(theaterId);
             if (theater == null)
             {
-                throw new Exception("The Theater Id is not found");
+                return NotFound();
             }
             return Ok(theater);
         }
@@ -45,12 +40,7 @@ namespace PKTickets.Controllers
 
         public ActionResult TheatersByLocation(string location)
         {
-            var theaters = theaterRepository.TheaterByLocation(location);
-            if (theaters.Count() == 0)
-            {
-                throw new Exception("There is no Theater in that Location");
-            }
-            return Ok(theaters);
+            return Ok(theaterRepository.TheaterByLocation(location));
         }
 
 

@@ -21,12 +21,7 @@ namespace PKTickets.Controllers
         [HttpGet("GetAllShowTimes")]
         public IActionResult GetAllShowTimes()
         {
-            var showTimes = showTimeRepository.GetAllShowTimes();
-            if (showTimes.Count() == 0)
-            {
-                throw new Exception("The ShowTime list is empty");
-            }
-            return Ok(showTimes);
+            return Ok(showTimeRepository.GetAllShowTimes();
         }
 
         [HttpGet("ShowTimeById/{showTimeId}")]
@@ -36,7 +31,7 @@ namespace PKTickets.Controllers
             var showTime = showTimeRepository.ShowTimeasStringById(showTimeId);
             if (showTime == null)
             {
-                throw new Exception("The ShowTime Id is not found");
+                return NotFound();
             }
             return Ok(showTime);
         }

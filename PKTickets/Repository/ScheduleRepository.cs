@@ -15,8 +15,11 @@ namespace PKTickets.Repository
         {
             this.db = db;
         }
-
         public List<Schedule> SchedulesList()
+        {
+            return db.Schedules.ToList();
+        }
+        public List<Schedule> AvailableSchedulesList()
         {
             DateTime date = DateTime.Now;
             var timeValue = TimesValue(date);
@@ -64,7 +67,7 @@ namespace PKTickets.Repository
             var scheduleExist = ScheduleById(id);
             if (scheduleExist == null)
             {
-                messages.Message = "The Schedule Id is not found";
+                messages.Message = "The Schedule Id ("+ id+") is not found";
             }
             var timeExist = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == scheduleExist.ShowTimeId);
             if (date.Date >= scheduleExist.Date && timeExist.ShowTiming > timeValue)
@@ -72,11 +75,11 @@ namespace PKTickets.Repository
                 scheduleExist.IsActive = false;
                     db.SaveChanges();
                     messages.Success = true;
-                    messages.Message = "The Schedule is Removed From reservation"; 
+                    messages.Message = "The Schedule Id ("+ id+") is Removed From reservation"; 
             }
             else
             {
-                messages.Message = "The Reservation is Already Started so cannot delete";
+                messages.Message = "The Reservation is Already Started to Schedule Id ("+ id + ") ,so can't Delete";
             }
             return messages;
         }
@@ -88,7 +91,7 @@ namespace PKTickets.Repository
             var screen=db.Screens.Where(x=>x.IsActive==true).FirstOrDefault(x => x.ScreenId == schedule.ScreenId);
             if (screen == null)
             {
-                messages.Message = "The Screen Id You Entered is wrong";
+                messages.Message = "The Screen Id("+ schedule.ScreenId + ") is not Registered";
                 return messages;
             }
             var scheduleExist = SchedulesByMovieId(schedule.MovieId).Where(x => x.ScreenId == schedule.ScreenId).Where
@@ -110,13 +113,13 @@ namespace PKTickets.Repository
                 db.Schedules.Add(schedule);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Schedule Is added Successfully";
+                messages.Message = "Schedule Id ("+ schedule.ScheduleId + ")Is added Successfully";
                 return messages;
             }
             else
             {
 
-                messages.Message = "The date you are entered Is wrong.";
+                messages.Message = "The date("+schedule.Date+")entered is Invalid,Kindly Check the Date.";
                 return messages;
             }
         }
@@ -128,7 +131,7 @@ namespace PKTickets.Repository
             var scheduleExist = ScheduleById(schedule.ScheduleId);
             if (scheduleExist == null)
             {
-                messages.Message = "The Schedule Id is not found";
+                messages.Message = "The Schedule Id ("+ schedule.ScheduleId +") is not found";
                 return messages;
             }
             DateTime date = DateTime.Now;
@@ -136,7 +139,7 @@ namespace PKTickets.Repository
             var timeExist = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
             if (date.Date >= schedule.Date && timeExist.ShowTiming > timeValue)
             {
-                messages.Message = "TheReservation Is Already started you cannot update";
+                messages.Message = "The Reservation Is Already started fot this Schedule Id ("+ schedule.ScheduleId + ") So can't Update" ;
                 return messages;
             }
             else
@@ -144,7 +147,7 @@ namespace PKTickets.Repository
                 scheduleExist.MovieId = schedule.MovieId;
                     db.SaveChanges();
                     messages.Success = true;
-                    messages.Message = "The Schedule is succssfully Updated";
+                    messages.Message = "The Schedule Id ("+ schedule.ScheduleId + ") is Successfully Updated";
             }
                 return messages;
         }

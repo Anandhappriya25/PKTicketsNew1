@@ -32,9 +32,9 @@ namespace PKTickets.Controllers
         }
 
         [HttpGet("GetMoviesByGenre/{Genre}")]
-        public IActionResult MovieByGenre(string title)
+        public IActionResult MovieByGenre(string Genre)
         {
-            return Ok(movieRepository.MovieByTitle(title));
+            return Ok(movieRepository.MovieByGenre(Genre));
         }
 
         [HttpGet("MovieById/{movieId}")]

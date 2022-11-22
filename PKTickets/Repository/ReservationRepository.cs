@@ -36,7 +36,7 @@ namespace PKTickets.Repository
             var reservationExist = ReservationById(id);
             if (reservationExist == null)
             {
-                messages.Message = "Reservation Id is not found";
+                messages.Message = "Reservation Id("+id+") is not found";
             }
             DateTime date = DateTime.Now;
             TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
@@ -44,7 +44,7 @@ namespace PKTickets.Repository
             var schedule = db.Schedules.FirstOrDefault(x => x.ScheduleId == reservationExist.ScheduleId);
             if (date.Date > schedule.Date)
             {
-                messages.Message = "Reservation Cancelation time is finished for this Id";
+                messages.Message = "You are UpTo Time ,so can't Cancel The Reservation";
                 return messages;
             }
             var showTiming = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
@@ -56,7 +56,7 @@ namespace PKTickets.Repository
             {
                 if (timing < showTiming.ShowTiming)
                 {
-                    messages.Message = "Reservation Cancelation time is finished for this Id";
+                    messages.Message = "You are UpTo Time ,so can't Cancel The Reservation";
                     return messages;
                 }
                 else
@@ -74,23 +74,23 @@ namespace PKTickets.Repository
             var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == reservation.UserId);
             if(user == null)
             {
-                messages.Message = "User Id is Not found";
+                messages.Message = "User Id("+reservation.UserId+") is Not found";
                 return messages;
             }
             var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservation.ScheduleId);
             if (schedule == null)
             {
-                messages.Message = "Schedule Id is Not found";
+                messages.Message = "Schedule Id("+reservation.ScheduleId+") is Not found";
                 return messages;
             }
             else if(schedule.AvailablePreSeats- reservation.PremiumTickets < 0)
             {
-                messages.Message = "Only "+schedule.AvailablePreSeats+" Premium Tickets Available";
+                messages.Message = "Only "+schedule.AvailablePreSeats+" Premium Tickets are Available";
                 return messages;
             }
             else if (schedule.AvailableEliSeats - reservation.EliteTickets < 0)
             {
-                messages.Message = "Only " + schedule.AvailableEliSeats + " Elite Tickets Available";
+                messages.Message = "Only " + schedule.AvailableEliSeats + " Elite Tickets are Available";
                 return messages;
             }
             else
@@ -101,7 +101,7 @@ namespace PKTickets.Repository
                 db.Reservations.Add(reservation);
                 db.SaveChanges();
                 messages.Success=true;
-                messages.Message = "Successfully" + tickets+" Tickets Reserved";
+                messages.Message = "Successfully " + tickets+" Tickets are Reserved";
                 return messages;
             }
             
@@ -115,7 +115,7 @@ namespace PKTickets.Repository
             var reservationExist = ReservationById(reservation.ReservationId);
             if (reservationExist == null)
             {
-                messages.Message = "Reservation Id is Not found";
+                messages.Message = "Reservation Id("+reservation.ReservationId+") is Not found";
                 return messages;
             }
             DateTime date = DateTime.Now;
@@ -124,7 +124,7 @@ namespace PKTickets.Repository
             var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservation.ScheduleId);
             if(date.Date > schedule.Date)
             {
-                messages.Message = "Reservation Updating time is finished for this Id";
+                messages.Message = "You are UpTo Time ,so can't Update The Reservation";
                 return messages;
             }
             var showTime = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
@@ -136,7 +136,7 @@ namespace PKTickets.Repository
             {
                 if (timing > showTime.ShowTiming)
                 {
-                    messages.Message = "Reservation Updating time is finished for this Id";
+                    messages.Message = "You are UpTo Time ,so can't Update The Reservation";
                     return messages;
                 }
                 else

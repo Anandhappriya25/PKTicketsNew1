@@ -33,7 +33,7 @@ namespace PKTickets.Repository
             var theaterExist = db.Theaters.Where(x => x.IsActive == true).FirstOrDefault(x => x.TheaterId == screen.TheaterId);
             if (theaterExist == null)
             {
-                messages.Message = "Theater Id is Not Registered.";
+                messages.Message = "Theater Id("+screen.TheaterId+") is Not Registered.";
                 return messages;
             }
             else
@@ -41,7 +41,7 @@ namespace PKTickets.Repository
                 db.Screens.Add(screen);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Screen is succssfully added";
+                messages.Message = "Screen ("+screen.ScreenName+") is succssfully Added";
                 return messages;
             }
         }
@@ -53,7 +53,7 @@ namespace PKTickets.Repository
             var ScreenExist = ScreenById(screen.ScreenId);
             if (ScreenExist == null)
             {
-                messages.Message = "Screen Id is not found";
+                messages.Message = "Screen Id("+ screen.ScreenId + ") is not found";
                 return messages;
             }
             else
@@ -63,7 +63,7 @@ namespace PKTickets.Repository
                 ScreenExist.PremiumPrice = screen.PremiumPrice;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Screen Name is succssfully Updated";
+                messages.Message = "Screen ("+ screen.ScreenName + ") is succssfully Updated";
                 return messages;
             }
         }
@@ -74,7 +74,7 @@ namespace PKTickets.Repository
             var ScreenExist = ScreenById(screenId);
             if (ScreenExist == null)
             {
-                messages.Message = "Screen Id is not found";
+                messages.Message = "Screen Id(" + screenId + ") is not found";
                 return messages;
             }
             else
@@ -82,7 +82,7 @@ namespace PKTickets.Repository
                 ScreenExist.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Screen is succssfully Deleted";
+                messages.Message = "Screen ("+ ScreenExist .ScreenName+ ") is succssfully Deleted";
                 return messages;
             }
         }

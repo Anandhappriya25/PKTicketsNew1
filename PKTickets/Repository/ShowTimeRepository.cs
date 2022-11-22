@@ -59,14 +59,14 @@ namespace PKTickets.Repository
             var showTime = TimeById(showTimeId);
             if (showTime == null)
             {
-                messages.Message = "ShowTime Id is not found";
+                messages.Message = "ShowTime Id("+showTimeId+") is not found";
             }
             else
             {
                 db.ShowTimes.Remove(showTime);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "ShowTime is succssfully deleted";
+                messages.Message = "ShowTime of Id ("+ showTimeId + ") is Successfully Deleted";
             }
             return messages;
         }
@@ -88,7 +88,7 @@ namespace PKTickets.Repository
                 db.ShowTimes.Add(showTime);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "ShowTiming is succssfully added";
+                messages.Message = "ShowTiming is Successfully added";
             }
             return messages;
         }
@@ -102,7 +102,7 @@ namespace PKTickets.Repository
             var nameExist = DetailsByTiming(time);
             if (showTimeExist == null)
             {
-                messages.Message = "ShowTime Id is not found";
+                messages.Message = "ShowTime Id(" + showTimeDTO.ShowTimeId + ") is not found";
             }
             else if (nameExist != null)
             {
@@ -113,7 +113,7 @@ namespace PKTickets.Repository
                 showTimeExist.ShowTiming = time;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "ShowTime is succssfully Updated";
+                messages.Message = "ShowTime of Id (" + showTimeDTO.ShowTimeId + ") is Successfully Updated";
             }
             return messages;
         }

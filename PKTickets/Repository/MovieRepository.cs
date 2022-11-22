@@ -55,7 +55,7 @@ namespace PKTickets.Repository
             var movieExist = MovieByTitle(movie.Title).FirstOrDefault(x => x.Director == movie.Director);
             if (movieExist != null)
             {
-                messages.Message = "Movie is already Registered.";
+                messages.Message = ""+movie.Title+" Movie is already Registered.";
                 return messages;
             }
             else
@@ -63,7 +63,7 @@ namespace PKTickets.Repository
                 db.Movies.Add(movie);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Movie is succssfully added";
+                messages.Message = "" + movie.Title +" Movie is Successfully Added";
                 return messages;
             }
         }
@@ -76,7 +76,7 @@ namespace PKTickets.Repository
             var movie = MovieById(movieId);
             if (movie == null)
             {
-                messages.Message = "Movie Id is not found";
+                messages.Message = "Movie Id ("+ movieId + ") is not found";
                 return messages;
             }
             else
@@ -84,7 +84,7 @@ namespace PKTickets.Repository
                 movie.IsPlaying = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Movie is succssfully deleted";
+                messages.Message = "" + movie.Title + " Movie is Successfully deleted";
                 return messages;
             }
         }
@@ -98,17 +98,17 @@ namespace PKTickets.Repository
             var directorExist = MovieByTitle(movie.Title).FirstOrDefault(x => x.Director == movie.Director);
             if (movieExist == null)
             {
-                messages.Message = "Movie Id is not found";
+                messages.Message = "Movie Id("+movie.MovieId+") is not found";
                 return messages;
             }
             else if (directorExist != null && directorExist.MovieId != directorExist.MovieId)
             {
-                messages.Message = "This Movie is already registered with this Director";
+                messages.Message = "This Movie is already registered with Director"+movie.Director+"";
                 return messages;
             }
             else if (languageExist != null && languageExist.MovieId != movieExist.MovieId)
             {
-                messages.Message = "Movie Language is already registered";
+                messages.Message = "This Movie is already registered with Language"+movie.Language + "";
                 return messages;
             }
             else
@@ -121,7 +121,7 @@ namespace PKTickets.Repository
                 movieExist.CastAndCrew = movie.CastAndCrew;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Movie is succssfully updated";
+                messages.Message = "" + movie.Title + " Movie is Successfully Updated";
                 return messages;
             }
         }

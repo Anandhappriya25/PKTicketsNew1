@@ -26,6 +26,12 @@ namespace PKTickets.Controllers
             return Ok(showRepository.SchedulesList());
         }
 
+        [HttpGet("AvailableSchedulesList")]
+        public IActionResult AvailableSchedulesList()
+        {
+            return Ok(showRepository.AvailableSchedulesList());
+        }
+
         [HttpGet("ScheduleById/{id}")]
 
         public ActionResult ScheduleById(int id)

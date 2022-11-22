@@ -49,7 +49,7 @@ namespace PKTickets.Repository
                 theater.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Theater is succssfully deleted";
+                messages.Message = "Theater "+theater.TheaterName+ "is Successfully deleted";
             }
             return messages;
         }
@@ -68,7 +68,7 @@ namespace PKTickets.Repository
                 db.Theaters.Add(theater);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Theater is succssfully added";
+                messages.Message = "Theater " + theater.TheaterName + "is Successfully Added";
             }
             return messages;
         }
@@ -93,7 +93,7 @@ namespace PKTickets.Repository
                 theaterExist.Location = theater.Location;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Theater is succssfully Updated";
+                messages.Message = "Theater " + theater.TheaterName + "is Successfully Updated";
             }
             return messages;
         }

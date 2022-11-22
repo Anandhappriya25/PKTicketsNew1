@@ -12,18 +12,23 @@ builder.Services.AddDbContext<PKTicketsDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("PKTICKETConnection"));
 });
+         Host.CreateDefaultBuilder(args)
+               .ConfigureServices((hostContext, services) =>
+               {
+                   services.AddHostedService<TimedHostedService>();
+               });
 //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 //            .AddCookie(options =>
 //            {
 //                options.LoginPath = "/Home/Login";
 
-//            });
-//builder.Services.ConfigureApplicationCookie(options =>
-//{
-//    options.Cookie.Name = ".AspNetCore.Cookies";
-//    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-//    options.SlidingExpiration = true;
-//});
+    //            });
+    //builder.Services.ConfigureApplicationCookie(options =>
+    //{
+    //    options.Cookie.Name = ".AspNetCore.Cookies";
+    //    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+    //    options.SlidingExpiration = true;
+    //});
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITheaterRepository, TheaterRepository>();

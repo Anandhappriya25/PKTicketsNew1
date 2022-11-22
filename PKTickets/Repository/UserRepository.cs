@@ -44,12 +44,12 @@ namespace PKTickets.Repository
             var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == user.EmailId);
             if (phoneExist != null)
             {
-                messages.Message = "PhoneNumber is already Registered.";
+                messages.Message = "The "+ user.PhoneNumber + " , PhoneNumber is already Registered.";
                 return messages;
             }
             else if (emailIdExist != null)
             {
-                messages.Message = "EmailId is already Registered.";
+                messages.Message = "The " + user.EmailId + " , EmailId is already Registered.";
                 return messages;
             }
             else
@@ -57,7 +57,7 @@ namespace PKTickets.Repository
                 db.Users.Add(user);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = user.UserName + " , Succssfully Registered the Account";
+                messages.Message = user.UserName + " , Your Account is Successfully Registered";
                 return messages;
             }
         }
@@ -69,7 +69,7 @@ namespace PKTickets.Repository
             var user = UserById(userId);
             if (user == null)
             {
-                messages.Message = "User Id ("+userId + ") is not found";
+                messages.Message = "User Id ("+userId +") is not found";
                 return messages;
             }
             else
@@ -77,7 +77,7 @@ namespace PKTickets.Repository
                 user.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "User is succssfully deleted";
+                messages.Message = "The "+user.UserName + " Account is Successfully deleted";
                 return messages;
             }
         }
@@ -97,12 +97,12 @@ namespace PKTickets.Repository
             }
             else if (phoneExist != null && phoneExist.UserId != userExist.UserId)
             {
-                messages.Message = "Phone Number  ("+userDTO.PhoneNumber + ")is already registered";
+                messages.Message = "The " + userDTO.PhoneNumber + " , PhoneNumber is already Registered.";
                 return messages;
             }
             else if (emailIdExist != null && emailIdExist.UserId != userExist.UserId)
             {
-                messages.Message = "EmailId  ("+userDTO.UserId +")is already registered";
+                messages.Message = "The " + userDTO.EmailId + " , EmailId is already Registered.";
                 return messages;
             }
             else
@@ -114,7 +114,7 @@ namespace PKTickets.Repository
                 userExist.Location = userDTO.Location;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "User is succssfully updated";
+                messages.Message = "The " + userDTO.UserName + " Account is Successfully Updated";
                 return messages;
             }
         }

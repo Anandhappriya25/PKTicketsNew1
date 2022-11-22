@@ -33,98 +33,86 @@ namespace PKTickets.Repository
         {
             Messages messages = new Messages();
             messages.Success = false;
-            //var reservationExist = ReservationById(id);
-            //if (reservationExist == null)
-            //{
-            //    messages.Message = "Reservation Id is not found";
-            //}
-            //DateTime date = DateTime.Now;
-            //TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
-            //var timing = TimingConvert.ConvertToInt(Convert.ToString(time));
-            //var seat = db.Seats.FirstOrDefault(x => x.SeatId == reservationExist.SeatId);
-            //var reservedMovie = db.Shows.FirstOrDefault(x => x.ShowId == seat.ShowsId);
-
-            //if (date > reservedMovie.Date)
-            //{
-            //    messages.Message = "Reservation Cancelation time is finished for this Id";
-            //    return messages;
-            //}
-            //var reservedShow = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == reservedMovie.ShowTimeId);
-            //if (timing < reservedShow.ShowTiming)
-            //{
-            //    messages.Message = "Reservation Cancelation time is finished for this Id";
-            //    return messages;
-            //}
-
-            //else
-            //{
-            //    reservationExist.IsActive = false;
-            //    seat.FSAvailable = seat.FSAvailable + reservationExist.FSBooked;
-            //    seat.SSAvailable = seat.FSAvailable + reservationExist.SSBooked;
-            //    seat.TSAvailable = seat.FSAvailable + reservationExist.TSBooked;
-            //    seat.FOSAvailable = seat.FSAvailable + reservationExist.FOSBooked;
-            //    seat.BSAvailable = seat.FSAvailable + reservationExist.BSBooked;
-            //    seat.FSReserved = seat.FSReserved - reservationExist.FSBooked;
-            //    seat.SSReserved = seat.SSReserved - reservationExist.SSBooked;
-            //    seat.TSReserved = seat.TSReserved - reservationExist.TSBooked;
-            //    seat.FOSReserved = seat.FOSReserved - reservationExist.FOSBooked;
-            //    seat.BSReserved = seat.BSReserved - reservationExist.BSBooked;
-            //    db.SaveChanges();
-            //    messages.Success = true;
-            //    messages.Message = "Reservation is succssfully deleted";
-            //}
-            return messages;
+            var reservationExist = ReservationById(id);
+            if (reservationExist == null)
+            {
+                messages.Message = "Reservation Id is not found";
+            }
+            DateTime date = DateTime.Now;
+            TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
+            var timing = TimingConvert.ConvertToInt(Convert.ToString(time));
+            var schedule = db.Schedules.FirstOrDefault(x => x.ScheduleId == reservationExist.ScheduleId);
+            if (date.Date > schedule.Date)
+            {
+                messages.Message = "Reservation Cancelation time is finished for this Id";
+                return messages;
+            }
+            var showTiming = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
+            if (date.Date < schedule.Date)
+            {
+                return DeleteSave(reservationExist, schedule);
+            }
+            else
+            {
+                if (timing < showTiming.ShowTiming)
+                {
+                    messages.Message = "Reservation Cancelation time is finished for this Id";
+                    return messages;
+                }
+                else
+                {
+                    return DeleteSave(reservationExist,schedule);
+                }
+            }
+               
         }
 
-        public Messages CreateReservation(ReservationDTO reservationDTO)
+        public Messages CreateReservation(Reservation reservation)
         {
             Messages messages = new Messages();
             messages.Success = false;
-            var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == reservationDTO.UserId);
+            var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == reservation.UserId);
             if(user == null)
             {
                 messages.Message = "User Id is Not found";
                 return messages;
             }
-            var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservationDTO.ScheduleId);
+            var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservation.ScheduleId);
             if (schedule == null)
             {
                 messages.Message = "Schedule Id is Not found";
                 return messages;
             }
-            else if(schedule.AvailablePreSeats- reservationDTO.PremiumTickets < 0)
+            else if(schedule.AvailablePreSeats- reservation.PremiumTickets < 0)
             {
                 messages.Message = "Only "+schedule.AvailablePreSeats+" Premium Tickets Available";
                 return messages;
             }
-            else if (schedule.AvailableEliSeats - reservationDTO.EliteTickets < 0)
+            else if (schedule.AvailableEliSeats - reservation.EliteTickets < 0)
             {
                 messages.Message = "Only " + schedule.AvailableEliSeats + " Elite Tickets Available";
                 return messages;
             }
             else
             {
-                Reservation reservation=new Reservation();
-                reservation.UserId=reservationDTO.UserId;
-                reservation.ScheduleId=reservationDTO.ScheduleId;
-                reservation.NumberOfTickets=reservationDTO.PremiumTickets + reservationDTO.EliteTickets;
-                schedule.AvailablePreSeats = schedule.AvailablePreSeats - reservationDTO.PremiumTickets;
-                schedule.AvailableEliSeats = schedule.AvailableEliSeats - reservationDTO.EliteTickets;
+                var tickets= reservation.PremiumTickets+ reservation.EliteTickets;
+                schedule.AvailablePreSeats = schedule.AvailablePreSeats - reservation.PremiumTickets;
+                schedule.AvailableEliSeats = schedule.AvailableEliSeats - reservation.EliteTickets;
                 db.Reservations.Add(reservation);
                 db.SaveChanges();
                 messages.Success=true;
-                messages.Message = "Successfully" + reservation.NumberOfTickets +" Tickets Reserved";
+                messages.Message = "Successfully" + tickets+" Tickets Reserved";
                 return messages;
             }
             
         }
 
 
-        public Messages UpdateReservation(ReservationDTO reservationDTO)
+        public Messages UpdateReservation(Reservation reservation)
         {
             Messages messages = new Messages();
             messages.Success = false;
-            var reservationExist = ReservationById(reservationDTO.ReservationId);
+            var reservationExist = ReservationById(reservation.ReservationId);
             if (reservationExist == null)
             {
                 messages.Message = "Reservation Id is Not found";
@@ -133,104 +121,84 @@ namespace PKTickets.Repository
             DateTime date = DateTime.Now;
             TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
             var timing = TimingConvert.ConvertToInt(Convert.ToString(time));
-            var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservationDTO.ScheduleId);
+            var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservation.ScheduleId);
             if(date.Date > schedule.Date)
             {
                 messages.Message = "Reservation Updating time is finished for this Id";
                 return messages;
             }
             var showTime = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
-            if (timing > showTime.ShowTiming)
+            if (date.Date < schedule.Date)
             {
-                messages.Message = "Reservation Updating time is finished for this Id";
-                return messages;
+                return UpdateSave(reservation, reservationExist, schedule);
             }
-            
+            else 
+            {
+                if (timing > showTime.ShowTiming)
+                {
+                    messages.Message = "Reservation Updating time is finished for this Id";
+                    return messages;
+                }
+                else
+                {
+                        return UpdateSave(reservation,reservationExist,schedule);
+                }
+             }
+                    
+        }
+          
+
+        
 
 
-            //if (date > reservedMovie.Date)
-            //{
-            //   
-            //}
-            //var reservedShow = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == reservedMovie.ShowTimeId);
-            //if (timing < reservedShow.ShowTiming)
-            //{
-            //    messages.Message = "Reservation Updating time is finished for this Id";
-            //    return messages;
-            //}
-            //var seat = db.Seats.FirstOrDefault(x => x.ShowsId == reservation.ShowId);
-            //if (seat.FSAvailable + (reservationExist.FSBooked - reservation.FSBooked) < 0)
-            //{
-            //    messages.Message = "This Show Do not have that much of FirstSection seats";
-            //    return messages;
-            //}
-            //else if (seat.SSAvailable + (reservationExist.SSBooked - reservation.SSBooked) < 0)
-            //{
-            //    messages.Message = "This Show Do not have that much of SecondSection seats";
-            //    return messages;
-            //}
-            //else if (seat.TSAvailable + (reservationExist.TSBooked - reservation.TSBooked) < 0)
-            //{
-            //    messages.Message = "This Show Do not have that much of ThirdSection seats";
-            //    return messages;
-            //}
-            //else if (seat.FOSAvailable + (reservationExist.FOSBooked - reservation.FOSBooked) < 0)
-            //{
-            //    messages.Message = "This Show Do not have that much of FourthSection seats";
-            //    return messages;
-            //}
-            //else if (seat.BSAvailable + (reservationExist.BSBooked - reservation.BSBooked) < 0)
-            //{
-            //    messages.Message = "This Show Do not have that much of BalconySection seats";
-            //    return messages;
-            //}
-            //else
-            //{
-            //    seat.FSAvailable = seat.FSAvailable + (reservationExist.FSBooked - reservation.FSBooked);
-            //    seat.SSAvailable = seat.SSAvailable + (reservationExist.SSBooked - reservation.SSBooked);
-            //    seat.TSAvailable = seat.TSAvailable + (reservationExist.TSBooked - reservation.TSBooked);
-            //    seat.FOSAvailable = seat.FOSAvailable + (reservationExist.FOSBooked - reservation.FOSBooked);
-            //    seat.BSAvailable = seat.BSAvailable + (reservationExist.BSBooked - reservation.BSBooked);
-            //    seat.FSReserved = seat.FSReserved - (reservationExist.FSBooked - reservation.FSBooked);
-            //    seat.SSReserved = seat.SSReserved - (reservationExist.SSBooked - reservation.SSBooked);
-            //    seat.TSReserved = seat.TSReserved - (reservationExist.TSBooked - reservation.TSBooked);
-            //    seat.FOSReserved = seat.FOSReserved - (reservationExist.FOSBooked - reservation.FOSBooked);
-            //    seat.BSReserved = seat.BSReserved - (reservationExist.BSBooked - reservation.BSBooked);
-            //    reservationExist.FSBooked = reservation.FSBooked;
-            //    reservationExist.SSBooked = reservation.SSBooked;
-            //    reservationExist.TSBooked = reservation.TSBooked;
-            //    reservationExist.FOSBooked = reservation.FOSBooked;
-            //    reservationExist.BSBooked = reservation.BSBooked;
-            //    reservationExist.NumberOfTickets = (int)(reservation.FSBooked + reservation.SSBooked + reservation.TSBooked + reservation.FOSBooked + reservation.BSBooked);
-            //    db.SaveChanges();
-            //    messages.Success = true;
-            //    messages.Message = " Tickets are Successfully Updated";}
+
+
+    #region Private Methods
+      private Messages UpdateSave(Reservation reservation, Reservation reservationExist, Schedule schedule)
+      {
+        Messages messages = new Messages();
+        messages.Success = false;
+        var premiumSeats = schedule.AvailablePreSeats - (reservationExist.PremiumTickets - reservation.PremiumTickets);
+        var eliteSeats = schedule.AvailableEliSeats - (reservationExist.EliteTickets - reservation.EliteTickets);
+        var premium = schedule.AvailablePreSeats - reservationExist.PremiumTickets;
+        var elite = schedule.AvailableEliSeats - reservationExist.EliteTickets;
+        if (premiumSeats < 0)
+        {
+            messages.Message = "This Show Do not have that much of Premium seats,only " + premium + "Premium Tickets available";
+            return messages;
+        }
+        else if (eliteSeats < 0)
+        {
+            messages.Message = "This Show Do not have that much of Elite seats,only " + elite + "Elite Tickets available";
+            return messages;
+        }
+        else
+        {
+            schedule.AvailablePreSeats = premiumSeats;
+            schedule.AvailableEliSeats = eliteSeats;
+            reservationExist.PremiumTickets = reservation.PremiumTickets;
+            reservationExist.EliteTickets = reservation.EliteTickets;
+            db.SaveChanges();
+            messages.Success = true;
+            messages.Message = " Tickets are Successfully Updated";
             return messages;
 
+
+        }
+      }
+        private Messages DeleteSave( Reservation reservationExist, Schedule schedule)
+        {
+            Messages messages = new Messages();
+            schedule.AvailablePreSeats = schedule.AvailablePreSeats + reservationExist.PremiumTickets;
+            schedule.AvailableEliSeats = schedule.AvailableEliSeats + reservationExist.EliteTickets;
+            reservationExist.IsActive = false;
+            db.SaveChanges();
+            messages.Success = true;
+            messages.Message = "Reservation is succssfully deleted";
+            return messages;
         }
 
-
-
-
-        //#region Private Methods
-        //private User UserById(int id)
-        //{
-        //    var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == id);
-        //    return user;
-        //}
-        //private Schedule ShowById(int id)
-        //{
-        //    var show = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == id);
-        //    return show;
-        //}
-
-
-
-        //private Screen ScreenById(int id)
-        //{
-        //    var screen = db.Screens.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScreenId == id);
-        //    return screen;
-        //}
+        #endregion
 
     }
 }

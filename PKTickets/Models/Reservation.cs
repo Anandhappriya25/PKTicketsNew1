@@ -24,9 +24,12 @@ namespace PKTickets.Models
         public Schedule? Schedule { get; set; }
 
 
-        [Required(ErrorMessage = "Please enter the NumberOfTickets")]
-        [Range(1, 10, ErrorMessage = "NumberOfTickets seats must be between 1 to 10")]
-        public int NumberOfTickets { get; set; } 
+        [Required(ErrorMessage = "Please enter the PremiumTickets")]
+        [Range(1, 10, ErrorMessage = "PremiumTickets seats must be between 1 to 10")]
+        public int PremiumTickets { get; set; }
+        [Required(ErrorMessage = "Please enter the EliteTickets")]
+        [Range(1, 10, ErrorMessage = "EliteTickets seats must be between 1 to 10")]
+        public int EliteTickets { get; set; }
         public bool IsActive { get; set; }=true;
 
     }

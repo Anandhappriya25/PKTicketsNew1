@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace PKTickets.Models
 {
@@ -15,6 +16,7 @@ namespace PKTickets.Models
         public int TheaterId { get; set; }
 
         [ForeignKey("TheaterId")]
+        [JsonIgnore]
         public Theater? Theater { get; set; }
 
         [Required(ErrorMessage = "Please enter the PremiumCapacity")]

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace PKTickets.Models
 {
@@ -12,6 +13,7 @@ namespace PKTickets.Models
         public int ScreenId { get; set; }
 
         [ForeignKey("ScreenId")]
+        [JsonIgnore]
         public Screen? Screen { get; set; }
         public DateTime Date { get; set; }
 
@@ -19,12 +21,14 @@ namespace PKTickets.Models
         public int ShowTimeId { get; set; }
 
         [ForeignKey("ShowTimeId")]
+        [JsonIgnore]
         public ShowTime? ShowTime { get; set; }
 
         [Required(ErrorMessage = "Please Enter the Movie Id !!!")]
         public int MovieId { get; set; }
 
         [ForeignKey("MovieId")]
+        [JsonIgnore]
         public Movie? Movie { get; set; }
 
     

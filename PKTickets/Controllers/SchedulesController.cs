@@ -9,12 +9,12 @@ namespace PKTickets.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ShedulesController : ControllerBase
+    public class SchedulesController : ControllerBase
     {
 
         private readonly IScheduleRepository showRepository;
 
-        public ShedulesController(IScheduleRepository _showRepository)
+        public SchedulesController(IScheduleRepository _showRepository)
         {
             showRepository = _showRepository;
         }

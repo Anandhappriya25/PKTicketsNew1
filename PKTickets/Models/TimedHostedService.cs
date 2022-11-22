@@ -19,7 +19,7 @@ namespace PKTickets.Models
         {
             _logger.LogInformation("Timed Background Service is starting.");
 
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 
             return Task.CompletedTask;
         }

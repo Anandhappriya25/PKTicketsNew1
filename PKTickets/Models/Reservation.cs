@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace PKTickets.Models
 {
@@ -14,6 +15,7 @@ namespace PKTickets.Models
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
+        [JsonIgnore]
         public User? User { get; set; }
 
        
@@ -21,6 +23,7 @@ namespace PKTickets.Models
         public int ScheduleId { get; set; }
 
         [ForeignKey("ScheduleId")]
+        [JsonIgnore]
         public Schedule? Schedule { get; set; }
 
 

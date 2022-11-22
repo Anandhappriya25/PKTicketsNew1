@@ -71,6 +71,11 @@ namespace PKTickets.Repository
         {
             Messages messages = new Messages();
             messages.Success = false;
+            if(reservation.PremiumTickets==0 && reservation.EliteTickets== 0)
+            {
+                messages.Message = " Atleast Please reaserve a seat";
+                return messages;
+            }
             var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == reservation.UserId);
             if(user == null)
             {

@@ -21,7 +21,7 @@ namespace PKTickets.Controllers
         [HttpGet("GetAllShowTimes")]
         public IActionResult GetAllShowTimes()
         {
-            return Ok(showTimeRepository.GetAllShowTimes();
+            return Ok(showTimeRepository.GetAllShowTimes());
         }
 
         [HttpGet("ShowTimeById/{showTimeId}")]

@@ -46,14 +46,14 @@ namespace PKTickets.Controllers
 
         [HttpPost("BookTicket")]
 
-        public IActionResult BookTicket(Reservation reservation)
+        public IActionResult BookTicket(ReservationDTO reservation)
         {
             return Ok(reservationRepository.CreateReservation(reservation));
         }
 
 
         [HttpPut("UpdateReservation")]
-        public ActionResult UpdateReservation(Reservation reservation)
+        public ActionResult UpdateReservation(ReservationDTO reservation)
         {
             return Ok(reservationRepository.UpdateReservation(reservation));
         }

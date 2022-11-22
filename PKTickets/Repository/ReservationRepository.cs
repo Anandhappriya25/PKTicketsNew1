@@ -76,33 +76,81 @@ namespace PKTickets.Repository
             return messages;
         }
 
-        public Messages CreateReservation(Reservation reservation)
+        public Messages CreateReservation(ReservationDTO reservationDTO)
         {
             Messages messages = new Messages();
             messages.Success = false;
-
-            return messages;
+            var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == reservationDTO.UserId);
+            if(user == null)
+            {
+                messages.Message = "User Id is Not found";
+                return messages;
+            }
+            var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservationDTO.ScheduleId);
+            if (schedule == null)
+            {
+                messages.Message = "Schedule Id is Not found";
+                return messages;
+            }
+            else if(schedule.AvailablePreSeats- reservationDTO.PremiumTickets < 0)
+            {
+                messages.Message = "Only "+schedule.AvailablePreSeats+" Premium Tickets Available";
+                return messages;
+            }
+            else if (schedule.AvailableEliSeats - reservationDTO.EliteTickets < 0)
+            {
+                messages.Message = "Only " + schedule.AvailableEliSeats + " Elite Tickets Available";
+                return messages;
+            }
+            else
+            {
+                Reservation reservation=new Reservation();
+                reservation.UserId=reservationDTO.UserId;
+                reservation.ScheduleId=reservationDTO.ScheduleId;
+                reservation.NumberOfTickets=reservationDTO.PremiumTickets + reservationDTO.EliteTickets;
+                schedule.AvailablePreSeats = schedule.AvailablePreSeats - reservationDTO.PremiumTickets;
+                schedule.AvailableEliSeats = schedule.AvailableEliSeats - reservationDTO.EliteTickets;
+                db.Reservations.Add(reservation);
+                db.SaveChanges();
+                messages.Success=true;
+                messages.Message = "Successfully" + reservation.NumberOfTickets +" Tickets Reserved";
+                return messages;
+            }
+            
         }
 
 
-        public Messages UpdateReservation(Reservation reservation)
+        public Messages UpdateReservation(ReservationDTO reservationDTO)
         {
             Messages messages = new Messages();
             messages.Success = false;
-            //var reservationExist = ReservationById(reservation.ReservationId);
-            //if (reservationExist == null)
-            //{
-            //    messages.Message = "Reservation Id is Not found";
-            //    return messages;
-            //}
-            //DateTime date = DateTime.Now;
-            //TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
-            //var timing = TimingConvert.ConvertToInt(Convert.ToString(time));
-            //var reservedMovie = db.Shows.FirstOrDefault(x => x.ShowId == reservation.ShowId);
+            var reservationExist = ReservationById(reservationDTO.ReservationId);
+            if (reservationExist == null)
+            {
+                messages.Message = "Reservation Id is Not found";
+                return messages;
+            }
+            DateTime date = DateTime.Now;
+            TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
+            var timing = TimingConvert.ConvertToInt(Convert.ToString(time));
+            var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservationDTO.ScheduleId);
+            if(date.Date > schedule.Date)
+            {
+                messages.Message = "Reservation Updating time is finished for this Id";
+                return messages;
+            }
+            var showTime = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
+            if (timing > showTime.ShowTiming)
+            {
+                messages.Message = "Reservation Updating time is finished for this Id";
+                return messages;
+            }
+            
+
+
             //if (date > reservedMovie.Date)
             //{
-            //    messages.Message = "Reservation Updating time is finished for this Id";
-            //    return messages;
+            //   
             //}
             //var reservedShow = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == reservedMovie.ShowTimeId);
             //if (timing < reservedShow.ShowTiming)

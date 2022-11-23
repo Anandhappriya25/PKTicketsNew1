@@ -201,7 +201,7 @@ namespace PKTickets.Repository
                            join schedule in db.Schedules on screen.ScreenId equals schedule.ScreenId
                            join showTime in db.ShowTimes on schedule.ShowTimeId equals showTime.ShowTimeId
                            join movie in db.Movies on schedule.MovieId equals movie.MovieId
-                           where screen.ScreenId == id && (schedule.Date==date.Date && showTime.ShowTiming >timeValue || schedule.Date>date.Date )
+                           where screen.ScreenId == id &&  schedule.IsActive == true &&((schedule.Date==date.Date && showTime.ShowTiming >timeValue) || (schedule.Date>date.Date) )
                            select new SchedulesDTO()
                            {
                                ScheduleId = schedule.ScheduleId,

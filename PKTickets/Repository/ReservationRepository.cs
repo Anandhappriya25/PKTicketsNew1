@@ -39,7 +39,7 @@ namespace PKTickets.Repository
                 messages.Message = "Reservation Id("+id+") is not found";
             }
             DateTime date = DateTime.Now;
-            TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
+            TimeSpan time = new TimeSpan( date.Hour, date.Minute,0);
             var timing = TimingConvert.ConvertToInt(Convert.ToString(time));
             var schedule = db.Schedules.FirstOrDefault(x => x.ScheduleId == reservationExist.ScheduleId);
             if (date.Date > schedule.Date)
@@ -54,7 +54,7 @@ namespace PKTickets.Repository
             }
             else
             {
-                if (timing < showTiming.ShowTiming)
+                if (timing > showTiming.ShowTiming)
                 {
                     messages.Message = "You are UpTo Time ,so can't Cancel The Reservation";
                     return messages;
@@ -124,7 +124,7 @@ namespace PKTickets.Repository
                 return messages;
             }
             DateTime date = DateTime.Now;
-            TimeSpan time = new TimeSpan(0, date.Hour, date.Minute);
+            TimeSpan time = new TimeSpan(date.Hour, date.Minute,0);
             var timing = TimingConvert.ConvertToInt(Convert.ToString(time));
             var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == reservation.ScheduleId);
             if(date.Date > schedule.Date)
@@ -197,8 +197,8 @@ namespace PKTickets.Repository
       {
         Messages messages = new Messages();
         messages.Success = false;
-        var premiumSeats = schedule.AvailablePreSeats - (reservationExist.PremiumTickets - reservation.PremiumTickets);
-        var eliteSeats = schedule.AvailableEliSeats - (reservationExist.EliteTickets - reservation.EliteTickets);
+        var premiumSeats = schedule.AvailablePreSeats + (reservationExist.PremiumTickets - reservation.PremiumTickets);
+        var eliteSeats = schedule.AvailableEliSeats + (reservationExist.EliteTickets - reservation.EliteTickets);
         var premium = schedule.AvailablePreSeats - reservationExist.PremiumTickets;
         var elite = schedule.AvailableEliSeats - reservationExist.EliteTickets;
         if (premiumSeats < 0)

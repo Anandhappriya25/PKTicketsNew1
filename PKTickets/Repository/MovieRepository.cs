@@ -94,7 +94,6 @@ namespace PKTickets.Repository
             Messages messages = new Messages();
             messages.Success = false;
             var movieExist = MovieById(movie.MovieId);
-            var languageExist = MovieByTitle(movie.Title).FirstOrDefault(x => x.Language == movie.Language);
             var directorExist = MovieByTitle(movie.Title).FirstOrDefault(x => x.Director == movie.Director);
             if (movieExist == null)
             {
@@ -106,14 +105,8 @@ namespace PKTickets.Repository
                 messages.Message = "This Movie is already registered with Director"+movie.Director+"";
                 return messages;
             }
-            else if (languageExist != null && languageExist.MovieId != movieExist.MovieId)
-            {
-                messages.Message = "This Movie is already registered with Language"+movie.Language + "";
-                return messages;
-            }
             else
             {
-                movieExist.Language = movie.Language;
                 movieExist.Director = movie.Director;
                 movieExist.Title = movie.Title;
                 movieExist.Duration = movie.Duration;
@@ -130,8 +123,11 @@ namespace PKTickets.Repository
         //    MovieDTO movie = new MovieDTO();
         //    var moviename = db.Movies.FirstOrDefault(x => x.MovieId == id);
         //    movie.MovieName = moviename.Title;
-        //    var scheduleList = db.Schedules.Where(x => x.MovieId == id).DistinctBy(x=>x.ScreenId).ToList();
-        //    List<Screen> screens=new List<Screen>();
+        //    movie.Theaters = obj2;
+        //    TheaterDetails obj2=new TheaterDetails();
+        //    obj2.Screens = null;
+        //    var scheduleList = db.Schedules.Where(x => x.MovieId == id).DistinctBy(x => x.ScreenId).ToList();
+        //    List<Screen> screens = new List<Screen>();
         //    foreach (var schedule in scheduleList)
         //    {
         //        var obj = db.Screens.FirstOrDefault(x => x.ScreenId == schedule.ScreenId);
@@ -140,7 +136,7 @@ namespace PKTickets.Repository
         //    var theaters = screens.DistinctBy(x => x.TheaterId).ToList();
 
 
-        //        return movie;
+        //    return movie;
         //}
 
         #region PrivateMethods
@@ -150,7 +146,7 @@ namespace PKTickets.Repository
         //    DateTime date = DateTime.Now;
         //    var timeValue = TimesValue(date);
         //    var screens = (from movie in db.Movies
-                           
+
         //                   join schedule in db.Schedules on movie.MovieId equals schedule.MovieId
         //                   join screen in db.Screens on schedule.ScreenId equals screen.ScreenId
         //                   join theater in db.Theaters on screen.TheaterId equals theater.TheaterId

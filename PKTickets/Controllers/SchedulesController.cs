@@ -71,5 +71,11 @@ namespace PKTickets.Controllers
         {
             return Ok(showRepository.DeleteSchedule(id));
         }
+
+        [HttpGet("SchedulesListByScreenId/{id}")]
+        public IActionResult SchedulesListByScreenId(int id)
+        {
+            return Ok(showRepository.SchedulesListByScreenId(id));
+        }
     }
 }

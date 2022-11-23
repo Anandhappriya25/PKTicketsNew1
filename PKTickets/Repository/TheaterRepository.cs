@@ -49,7 +49,7 @@ namespace PKTickets.Repository
                 theater.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Theater "+theater.TheaterName+ "is Successfully deleted";
+                messages.Message = "Theater "+theater.TheaterName+ " is Successfully deleted";
             }
             return messages;
         }

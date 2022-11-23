@@ -31,9 +31,17 @@ namespace PKTickets.Repository
             Messages messages = new Messages();
             messages.Success = false;
             var theaterExist = db.Theaters.Where(x => x.IsActive == true).FirstOrDefault(x => x.TheaterId == screen.TheaterId);
+           
             if (theaterExist == null)
             {
                 messages.Message = "Theater Id("+screen.TheaterId+") is Not Registered.";
+                return messages;
+            }
+            var screenExist = db.Screens.Where(x => x.IsActive == true).Where(x => x.TheaterId == screen.TheaterId).
+                FirstOrDefault(x => x.ScreenName == screen.ScreenName);
+            if(screenExist != null)
+            {
+                messages.Message = "Screen Name(" + screen.ScreenName + ") is Already Registered.";
                 return messages;
             }
             else
@@ -87,23 +95,37 @@ namespace PKTickets.Repository
             }
         }
 
-        public List<Screen> TheaterScreens(int id)
+        
+        public ScreensListDTO TheaterScreens(int id)
+        {
+            var theater = db.Theaters.Where(x => x.IsActive == true).FirstOrDefault(x => x.TheaterId == id);
+            var screens = db.Screens.Where(x => x.IsActive == true).Where(x => x.TheaterId == id).ToList();
+            ScreensListDTO list = new ScreensListDTO();
+            list.TheaterName = theater.TheaterName;
+            list.ScreensCount = screens.Count();
+            list.Screens = Screens(id);
+            return list;
+        }
+
+
+        #region PrivateMethods
+        private List<ScreensDTO> Screens(int id)
         {
             var screens = (from theater in db.Theaters
                            join screen in db.Screens on theater.TheaterId equals screen.TheaterId
-                           where theater.TheaterId == id
-                           select new Screen()
+                           where theater.TheaterId == id && screen.IsActive == true
+                           select new ScreensDTO()
                            {
                                ScreenId = screen.ScreenId,
                                ScreenName = screen.ScreenName,
-                               PremiumPrice = screen.PremiumPrice,
-                               ElitePrice = screen.ElitePrice,
                                PremiumCapacity = screen.PremiumCapacity,
                                EliteCapacity = screen.EliteCapacity,
+                               PremiumPrice = screen.PremiumPrice,
+                               ElitePrice = screen.ElitePrice,
                            }).ToList();
 
             return screens;
         }
-
+        #endregion
     }
 }

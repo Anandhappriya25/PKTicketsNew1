@@ -10,6 +10,6 @@ namespace PKTickets.Interfaces
         public Messages AddScreen(Screen screen);
         public Messages UpdateScreen(Screen screen);
         public Messages RemoveScreen(int screenId);
-        public List<Screen> TheaterScreens(int id);
+        public ScreensListDTO TheaterScreens(int id);
     }
 }

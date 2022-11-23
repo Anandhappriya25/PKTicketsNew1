@@ -44,12 +44,12 @@ namespace PKTickets.Repository
             var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == user.EmailId);
             if (phoneExist != null)
             {
-                messages.Message = "The "+ user.PhoneNumber + " , PhoneNumber is already Registered.";
+                messages.Message = "The ("+ user.PhoneNumber + ") , PhoneNumber is already Registered.";
                 return messages;
             }
             else if (emailIdExist != null)
             {
-                messages.Message = "The " + user.EmailId + " , EmailId is already Registered.";
+                messages.Message = "The (" + user.EmailId + ") , EmailId is already Registered.";
                 return messages;
             }
             else
@@ -97,12 +97,12 @@ namespace PKTickets.Repository
             }
             else if (phoneExist != null && phoneExist.UserId != userExist.UserId)
             {
-                messages.Message = "The " + userDTO.PhoneNumber + " , PhoneNumber is already Registered.";
+                messages.Message = "The ("+ userDTO.PhoneNumber + "), PhoneNumber is already Registered.";
                 return messages;
             }
             else if (emailIdExist != null && emailIdExist.UserId != userExist.UserId)
             {
-                messages.Message = "The " + userDTO.EmailId + " , EmailId is already Registered.";
+                messages.Message = "The (" + userDTO.EmailId + "), EmailId is already Registered.";
                 return messages;
             }
             else

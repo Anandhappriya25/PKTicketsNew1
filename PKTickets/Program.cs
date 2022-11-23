@@ -12,23 +12,19 @@ builder.Services.AddDbContext<PKTicketsDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("PKTICKETConnection"));
 });
-         Host.CreateDefaultBuilder(args)
-               .ConfigureServices((hostContext, services) =>
-               {
-                   services.AddHostedService<TimedHostedService>();
-               });
+//builder.Services.AddHostedService<TimedHostedService>();
 //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 //            .AddCookie(options =>
 //            {
 //                options.LoginPath = "/Home/Login";
 
-    //            });
-    //builder.Services.ConfigureApplicationCookie(options =>
-    //{
-    //    options.Cookie.Name = ".AspNetCore.Cookies";
-    //    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-    //    options.SlidingExpiration = true;
-    //});
+//            });
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.Cookie.Name = ".AspNetCore.Cookies";
+//    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+//    options.SlidingExpiration = true;
+//});
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITheaterRepository, TheaterRepository>();
@@ -37,6 +33,7 @@ builder.Services.AddScoped<IShowTimeRepository, ShowTimeRepository>();
 builder.Services.AddScoped<IScreenRepository, ScreenRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+//builder.Services.AddScoped<IHostedService, TimedHostedService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

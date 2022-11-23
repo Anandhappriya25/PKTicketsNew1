@@ -64,6 +64,13 @@ namespace PKTickets.Repository
                 messages.Message = "Screen Id("+ screen.ScreenId + ") is not found";
                 return messages;
             }
+            var nameExist = db.Screens.Where(x => x.IsActive == true).Where(x => x.TheaterId == screen.TheaterId).
+                FirstOrDefault(x => x.ScreenName == screen.ScreenName);
+            if(nameExist!=null && nameExist.ScreenId != screen.ScreenId)
+            {
+                messages.Message = "Screen Name(" + screen.ScreenName + ") is Already Registered.";
+                return messages;
+            }
             else
             {
                 ScreenExist.ScreenName = screen.ScreenName;

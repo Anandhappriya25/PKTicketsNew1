@@ -77,5 +77,10 @@ namespace PKTickets.Controllers
         {
             return Ok(showRepository.SchedulesListByScreenId(id));
         }
+        [HttpGet("TheaterSchedulesById/{id}")]
+        public IActionResult TheaterSchedulesById(int id)
+        {
+            return Ok(showRepository.TheaterSchedulesById(id));
+        }
     }
 }

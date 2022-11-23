@@ -9,16 +9,7 @@
 
     }
 
-    //public class ScreenSchedules
-    //{
-    //    public int ScheduleId { get; set; }
-    //    public string MovieName { get; set; }
-    //    public DateTime Date { get; set; }
-    //    public string ShowTime { get; set; }
-
-    //    public int AvailablePremiumSeats { get; set; }
-    //    public int AvailableEliteSeats { get; set; }
-    //}
+  
     public class ScreenSchedulesDTO
     {
         public int ScreenId { get; set; }

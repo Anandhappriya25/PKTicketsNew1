@@ -13,5 +13,6 @@ namespace PKTickets.Interfaces
         public Messages UpdateSchedule(Schedule schedule);
         public List<Schedule> AvailableSchedulesList();
         public SchedulesListDTO SchedulesListByScreenId(int id);
+        public TheatersSchedulesDTO TheaterSchedulesById(int id);
     }
 }

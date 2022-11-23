@@ -175,18 +175,18 @@ namespace PKTickets.Repository
             list.TheaterName = theater.TheaterName; 
             list.ScreensCount =screens.Count();
 
-            ScreenSchedulesDTO scheduleList = new ScreenSchedulesDTO();
+           List<ScreenSchedulesDTO> schedules=new List<ScreenSchedulesDTO>();
             foreach (var screen in screens)
             {
-                
+                ScreenSchedulesDTO scheduleList = new ScreenSchedulesDTO();
                 scheduleList.ScreenId=screen.ScreenId;
                 scheduleList.ScreenName=screen.ScreenName;  
                 scheduleList.PremiumCapacity=screen.PremiumCapacity;    
                 scheduleList.EliteCapacity=screen.EliteCapacity;
                 scheduleList.Schedules = SchedulesList(screen.ScreenId);
-                list.Screens.Add(scheduleList);
+                schedules.Add(scheduleList);
             }
-
+            list.Screens = schedules;
             return list;
         }
 

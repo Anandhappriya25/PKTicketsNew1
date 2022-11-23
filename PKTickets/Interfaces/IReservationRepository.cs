@@ -12,5 +12,6 @@ namespace PKTickets.Interfaces
         public Messages CreateReservation(Reservation reservation);
         public Messages UpdateReservation(Reservation reservation);
         public List<Reservation> ReservationsByShowId(int id);
+        public UserDTO ReservationsByUserId(int id);
     }
 }

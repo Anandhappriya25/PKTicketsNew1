@@ -20,11 +20,11 @@ namespace PKTickets.Models
         public Theater? Theater { get; set; }
 
         [Required(ErrorMessage = "Please enter the PremiumCapacity")]
-        [Range(10, 100, ErrorMessage = "PremiumCapacity must be between 10 to 100")]
+        [Range(10, 250, ErrorMessage = "PremiumCapacity must be between 10 to 100")]
         public int PremiumCapacity { get; set; }
 
         [Required(ErrorMessage = "Please enter the EliteCapacity")]
-        [Range(10, 100, ErrorMessage = "EliteCapacity  must be between 10 to 100")]
+        [Range(10, 250, ErrorMessage = "EliteCapacity  must be between 10 to 100")]
         public int EliteCapacity { get; set; }
 
         [Required(ErrorMessage = "Please enter the PremiumPrice")]

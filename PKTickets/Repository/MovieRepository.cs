@@ -125,7 +125,54 @@ namespace PKTickets.Repository
                 return messages;
             }
         }
+        //public MovieDTO SchedulesByMovieId(int id)
+        //{
+        //    MovieDTO movie = new MovieDTO();
+        //    var moviename = db.Movies.FirstOrDefault(x => x.MovieId == id);
+        //    movie.MovieName = moviename.Title;
+        //    var scheduleList = db.Schedules.Where(x => x.MovieId == id).DistinctBy(x=>x.ScreenId).ToList();
+        //    List<Screen> screens=new List<Screen>();
+        //    foreach (var schedule in scheduleList)
+        //    {
+        //        var obj = db.Screens.FirstOrDefault(x => x.ScreenId == schedule.ScreenId);
+        //        screens.Add(obj);
+        //    }
+        //    var theaters = screens.DistinctBy(x => x.TheaterId).ToList();
 
-     
+
+        //        return movie;
+        //}
+
+        #region PrivateMethods
+
+        //private List<ScheduleDetails> SchedulesList(int id)
+        //{
+        //    DateTime date = DateTime.Now;
+        //    var timeValue = TimesValue(date);
+        //    var screens = (from movie in db.Movies
+                           
+        //                   join schedule in db.Schedules on movie.MovieId equals schedule.MovieId
+        //                   join screen in db.Screens on schedule.ScreenId equals screen.ScreenId
+        //                   join theater in db.Theaters on screen.TheaterId equals theater.TheaterId
+        //                   join showTime in db.ShowTimes on schedule.ShowTimeId equals showTime.ShowTimeId
+        //                   where movie.MovieId == id && (schedule.Date == date.Date && showTime.ShowTiming > timeValue || schedule.Date > date.Date)
+        //                   select new ScheduleDetails()
+        //                   {
+        //                       ScheduleId = schedule.ScheduleId,
+        //                       Date = schedule.Date,
+        //                       ShowTime = TimingConvert.ConvertToString(showTime.ShowTiming),
+        //                       AvailablePremiumSeats = schedule.AvailablePreSeats,
+        //                       AvailableEliteSeats = schedule.AvailableEliSeats
+        //                   }).ToList();
+
+        //    return screens;
+        //}
+        private int TimesValue(DateTime date)
+        {
+            TimeSpan time = new TimeSpan(date.Hour, date.Minute, 0);
+            return (TimingConvert.ConvertToInt(Convert.ToString(time)));
+        }
+        #endregion
+
     }
 }

@@ -151,14 +151,48 @@ namespace PKTickets.Repository
              }
                     
         }
-          
+        public UserDTO ReservationsByUserId(int id)
+        {
+            var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == id);
+            UserDTO details = new UserDTO();
+            details.UserName = user.UserName;
+            details.ReservationDetail= ReservationDetailsByUserId(id);
+            return details;
+        }
 
-        
 
 
 
 
-    #region Private Methods
+
+        #region Private Methods
+
+        private List<ReservationDetails> ReservationDetailsByUserId(int id)
+        {
+            var reservations = (from user in db.Users
+                           join reservation in db.Reservations on user.UserId equals reservation.UserId
+                                join schedule in db.Schedules on reservation.ScheduleId equals schedule.ScheduleId
+                                join screen in db.Screens on schedule.ScreenId equals screen.ScreenId
+                                join theater in db.Theaters on screen.TheaterId equals theater.TheaterId
+                                join movie in db.Movies on schedule.MovieId equals movie.MovieId
+                                join time in db.ShowTimes on schedule.ShowTimeId equals time.ShowTimeId
+                                where user.UserId == id && user.IsActive==true && reservation.IsActive==true
+                           select new ReservationDetails()
+                           {
+                           ReservationId= reservation.ReservationId,
+                               TheaterName=theater.TheaterName,
+                               ScreenName=screen.ScreenName,
+                               MovieName=movie.Title,
+                               Date=schedule.Date,
+                               ShowTime=TimingConvert.ConvertToString(time.ShowTiming),
+                               PremiumTickets =reservation.PremiumTickets,
+                               EliteTickets=reservation.EliteTickets,
+                               PremiumPrice=screen.PremiumPrice,
+                               ElitePrice=screen.ElitePrice,
+                               TotalAmount= (reservation.PremiumTickets * screen.PremiumPrice)+(reservation.EliteTickets * screen.ElitePrice),
+                           }).ToList();
+            return reservations;
+        }
       private Messages UpdateSave(Reservation reservation, Reservation reservationExist, Schedule schedule)
       {
         Messages messages = new Messages();

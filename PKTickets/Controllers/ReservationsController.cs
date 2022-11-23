@@ -65,10 +65,10 @@ namespace PKTickets.Controllers
         {
             return Ok(reservationRepository.DeleteReservation(id));
         }
-        //[HttpGet("ReservationsByUserId")]
-        //public IActionResult ReservationsByUserId(int id)
-        //{
-        //    return Ok(reservationRepository.ReservationsByShowId(id));
-        //}
+        [HttpGet("ReservationsByUserId/{id}")]
+        public IActionResult ReservationsByUserId(int id)
+        {
+            return Ok(reservationRepository.ReservationsByUserId(id));
+        }
     }
 }

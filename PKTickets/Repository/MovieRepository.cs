@@ -84,7 +84,7 @@ namespace PKTickets.Repository
                 movie.IsPlaying = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "" + movie.Title + " Movie is Successfully deleted";
+                messages.Message = "" + movie.Title + " Movie is Successfully Removed";
                 return messages;
             }
         }
@@ -97,7 +97,7 @@ namespace PKTickets.Repository
             var directorExist = MovieByTitle(movie.Title).FirstOrDefault(x => x.Director == movie.Director);
             if (movieExist == null)
             {
-                messages.Message = "Movie Id("+movie.MovieId+") is not found";
+                messages.Message = "Movie Id is not found";
                 return messages;
             }
             else if (directorExist != null && directorExist.MovieId != directorExist.MovieId)

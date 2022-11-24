@@ -43,7 +43,11 @@ namespace PKTickets.Repository
             }
             return scheduleList;
         }
-
+        public Movie MovieById(int id)
+        {
+            var movie = db.Movies.Where(x => x.IsPlaying == true).FirstOrDefault(x => x.MovieId == id);
+            return movie;
+        }
         public Schedule ScheduleById(int id)
         {
             var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == id);
@@ -52,8 +56,7 @@ namespace PKTickets.Repository
 
         public List<Schedule> SchedulesByMovieId(int id)
         {
-
-            var scheduleList = SchedulesList().Where(x => x.MovieId == id).ToList();
+            var scheduleList = AvailableSchedulesList().Where(x => x.MovieId == id).ToList();
             return scheduleList;
         }
 
@@ -98,7 +101,7 @@ namespace PKTickets.Repository
                (x => x.Date == schedule.Date).FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
             if (scheduleExist != null)
             {
-                messages.Message = "This Schedule is already Registered";
+                messages.Message = "This Schedule is already Registered Please check the Fields";
                 return messages;
             }
             DateTime date = DateTime.Now;
@@ -131,7 +134,7 @@ namespace PKTickets.Repository
             var scheduleExist = ScheduleById(schedule.ScheduleId);
             if (scheduleExist == null)
             {
-                messages.Message = "The Schedule Id ("+ schedule.ScheduleId +") is not found";
+                messages.Message = "The Schedule Id is not found";
                 return messages;
             }
             DateTime date = DateTime.Now;
@@ -162,10 +165,14 @@ namespace PKTickets.Repository
             list.ScreenName = screens.ScreenName; 
             list.PremiumCapacity = screens.PremiumCapacity;
             list.EliteCapacity = screens.EliteCapacity;
-            list.Schedules = SchedulesList(id);
+            list.Schedules = SchedulesListId(id);
             return list;
         }
-
+        public Screen ScreenById(int id)
+        {
+            var screen = db.Screens.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScreenId == id);
+            return screen;
+        }
         public TheatersSchedulesDTO TheaterSchedulesById(int id)
         {
             var theater = db.Theaters.FirstOrDefault(x => x.TheaterId == id);
@@ -183,17 +190,22 @@ namespace PKTickets.Repository
                 scheduleList.ScreenName=screen.ScreenName;  
                 scheduleList.PremiumCapacity=screen.PremiumCapacity;    
                 scheduleList.EliteCapacity=screen.EliteCapacity;
-                scheduleList.Schedules = SchedulesList(screen.ScreenId);
+                scheduleList.Schedules = SchedulesListId(screen.ScreenId);
                 schedules.Add(scheduleList);
             }
             list.Screens = schedules;
             return list;
         }
+        public Theater TheaterById(int id)
+        {
+            var theater = db.Theaters.Where(x => x.IsActive == true).FirstOrDefault(x => x.TheaterId == id);
+            return theater;
+        }
 
-         
+
         #region PrivateMethods
 
-        private List<SchedulesDTO> SchedulesList(int id)
+        private List<SchedulesDTO> SchedulesListId(int id)
         {
             DateTime date = DateTime.Now;
             var timeValue = TimesValue(date);

@@ -18,15 +18,15 @@ namespace PKTickets.Controllers
             showTimeRepository = _showTimeRepository;
         }
 
-        [HttpGet("GetAllShowTimes")]
-        public IActionResult GetAllShowTimes()
+        [HttpGet("")]
+        public IActionResult List()
         {
             return Ok(showTimeRepository.GetAllShowTimes());
         }
 
-        [HttpGet("ShowTimeById/{showTimeId}")]
+        [HttpGet("{showTimeId}")]
 
-        public ActionResult ShowTimeById(int showTimeId)
+        public ActionResult GetById(int showTimeId)
         {
             var showTime = showTimeRepository.ShowTimeasStringById(showTimeId);
             if (showTime == null)
@@ -36,26 +36,48 @@ namespace PKTickets.Controllers
             return Ok(showTime);
         }
 
-        [HttpPost("AddShowTiming")]
 
-        public IActionResult AddShowTiming(ShowTimeDTO showTimeDTO)
+        [HttpPost("")]
+        public IActionResult Add(ShowTimeDTO showTime)
         {
-            return Ok(showTimeRepository.CreateShowTime(showTimeDTO));
+            var result = showTimeRepository.CreateShowTime(showTime);
+            if (result.Success == false)
+            {
+                return Conflict(result.Message);
+            }
+            return Created("https://localhost:7221/api/ShowTimes/" + showTime.ShowTimeId + "", result.Message);
         }
 
 
-        [HttpPut("UpdateShowTime")]
-        public ActionResult UpdateShowTime(ShowTimeDTO showTimeDTO)
+        [HttpPut("")]
+        public ActionResult Update(ShowTimeDTO showTime)
         {
-            return Ok(showTimeRepository.UpdateShowTime(showTimeDTO));
+            if (showTime.ShowTimeId == 0)
+            {
+                return BadRequest("Enter the ShowTime Id field");
+            }
+            var result = showTimeRepository.UpdateShowTime(showTime);
+            if (result.Message == "ShowTime Id is not found")
+            {
+                return NotFound(result.Message);
+            }
+            else if (result.Success == false)
+            {
+                return Conflict(result.Message);
+            }
+            return Ok(result.Message);
         }
 
 
-        [HttpPut("DeleteShowTime/{showTimeId}")]
-
-        public IActionResult DeleteShowTime(int showTimeId)
+        [HttpDelete("{showTimeId}")]
+        public IActionResult Remove(int showTimeId)
         {
-            return Ok(showTimeRepository.DeleteShowTime(showTimeId));
+            var result = showTimeRepository.DeleteShowTime(showTimeId);
+            if (result.Success == false)
+            {
+                return NotFound(result.Message);
+            }
+            return Ok(result.Message);
         }
 
     }

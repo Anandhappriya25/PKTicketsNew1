@@ -57,7 +57,7 @@ namespace PKTickets.Repository
                 db.Users.Add(user);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = user.UserName + ", Your Account is Successfully Registered And Your Id is "+user.UserId+"";
+                messages.Message = user.UserName + ", Your Account is Successfully Registered";
                 return messages;
             }
         }
@@ -92,7 +92,7 @@ namespace PKTickets.Repository
             var emailIdExist = db.Users.FirstOrDefault(x => x.EmailId == userDTO.EmailId);
             if (userExist == null)
             {
-                messages.Message = "User Id ("+userDTO.UserId + ") is not found";
+                messages.Message = "User Id is not found";
                 return messages;
             }
             else if (phoneExist != null && phoneExist.UserId != userExist.UserId)

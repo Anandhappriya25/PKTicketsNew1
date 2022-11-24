@@ -61,7 +61,7 @@ namespace PKTickets.Repository
             var ScreenExist = ScreenById(screen.ScreenId);
             if (ScreenExist == null)
             {
-                messages.Message = "Screen Id("+ screen.ScreenId + ") is not found";
+                messages.Message = "Screen Id is not found";
                 return messages;
             }
             var nameExist = db.Screens.Where(x => x.IsActive == true).Where(x => x.TheaterId == screen.TheaterId).
@@ -78,7 +78,7 @@ namespace PKTickets.Repository
                 ScreenExist.PremiumPrice = screen.PremiumPrice;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Screen ("+ screen.ScreenName + ") is succssfully Updated";
+                messages.Message = "Screen "+ screen.ScreenName + " is succssfully Updated";
                 return messages;
             }
         }
@@ -97,7 +97,7 @@ namespace PKTickets.Repository
                 ScreenExist.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Screen ("+ ScreenExist .ScreenName+ ") is succssfully Deleted";
+                messages.Message = "Screen ("+ ScreenExist .ScreenName+ ") is succssfully Removed";
                 return messages;
             }
         }
@@ -113,7 +113,11 @@ namespace PKTickets.Repository
             list.Screens = Screens(id);
             return list;
         }
-
+        public Theater TheaterById(int id)
+        {
+         var   theater = db.Theaters.Where(x => x.IsActive == true).FirstOrDefault(x => x.TheaterId == id);
+            return theater;
+        }
 
         #region PrivateMethods
         private List<ScreensDTO> Screens(int id)

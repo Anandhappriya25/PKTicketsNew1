@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PKTickets.Interfaces;
 using PKTickets.Models;
 using PKTickets.Models.DTO;
+using PKTickets.Repository;
 
 namespace PKTickets.Controllers
 {
@@ -19,27 +20,37 @@ namespace PKTickets.Controllers
         }
 
 
-        [HttpGet("GetMoviesList")]
-        public IActionResult GetMoviesList()
+        [HttpGet("")]
+        public IActionResult List()
         {
             return Ok(movieRepository.GetAllMovies());
         }
 
-        [HttpGet("GetMoviesByTitle/{title}")]
-        public IActionResult GetMoviesByTitle(string title)
+        [HttpGet("Title/{title}")]
+        public IActionResult ListByTitle(string title)
         {
-            return Ok(movieRepository.MovieByTitle(title));
+            var list = movieRepository.MovieByTitle(title);
+            if(list.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(list);
         }
 
-        [HttpGet("GetMoviesByGenre/{Genre}")]
-        public IActionResult MovieByGenre(string Genre)
+        [HttpGet("Genre/{Genre}")]
+        public IActionResult ListByGenre(string Genre)
         {
-            return Ok(movieRepository.MovieByGenre(Genre));
+            var list = movieRepository.MovieByGenre(Genre);
+            if (list.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(list);
         }
 
-        [HttpGet("MovieById/{movieId}")]
+        [HttpGet("{movieId}")]
 
-        public ActionResult MovieById(int movieId)
+        public ActionResult GetById(int movieId)
         {
             var movie = movieRepository.MovieById(movieId);
             if (movie == null)
@@ -50,26 +61,48 @@ namespace PKTickets.Controllers
         }
 
 
-        [HttpPost("CreateMovie")]
-
-        public IActionResult CreateMovie(Movie movie)
+        [HttpPost("")]
+        public IActionResult Add(Movie movie)
         {
-            return Ok(movieRepository.CreateMovie(movie));
+            var result = movieRepository.CreateMovie(movie);
+            if (result.Success == false)
+            {
+                return Conflict(result.Message);
+            }
+            return Created("https://localhost:7221/api/Movies/" + movie.MovieId + "", result.Message);
         }
 
 
-        [HttpPut("UpdateMovie")]
-        public ActionResult UpdateMovie(Movie movie)
+        [HttpPut("")]
+        public ActionResult Update(Movie movie)
         {
-            return Ok(movieRepository.UpdateMovie(movie));
+            if (movie.MovieId == 0)
+            {
+                return BadRequest("Enter the Movie Id field");
+            }
+            var result = movieRepository.UpdateMovie(movie);
+            if (result.Message == "Movie Id is not found")
+            {
+                return NotFound(result.Message);
+            }
+            else if (result.Success == false)
+            {
+                return Conflict(result.Message);
+            }
+            return Ok(result.Message);
         }
 
 
-        [HttpPut("DeleteMovie/{movieId}")]
+        [HttpDelete("{movieId}")]
 
-        public IActionResult DeleteMovie(int movieId)
+        public IActionResult Remove(int movieId)
         {
-            return Ok(movieRepository.DeleteMovie(movieId));
+            var result = movieRepository.DeleteMovie(movieId);
+            if (result.Success == false)
+            {
+                return NotFound(result.Message);
+            }
+            return Ok(result.Message);
         }
     }
 }

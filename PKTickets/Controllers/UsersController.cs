@@ -45,19 +45,27 @@ namespace PKTickets.Controllers
             var result=userRepository.CreateUser(user);
             if(result.Success==false)
             {
-                return BadRequest(result.Message);
+                return Conflict(result.Message);
             }
-            return Created("https://localhost:7221/api/users/YourId", result.Message);
+            return Created("https://localhost:7221/api/users/"+user.UserId+"", result.Message);
         }
 
 
         [HttpPut("")]
         public ActionResult Update(User user)
         {
-            var result = userRepository.UpdateUser(user);
-            if (result.Success == false)
+            if (user.UserId ==0)
             {
-                return BadRequest(result.Message);
+                return BadRequest("Enter the User Id field");
+            }
+            var result = userRepository.UpdateUser(user);
+            if(result.Message== "User Id is not found")
+            {
+                return NotFound(result.Message);
+            }
+            else if (result.Success == false)
+            {
+                return Conflict(result.Message);
             }
             return Ok(result.Message);
         }

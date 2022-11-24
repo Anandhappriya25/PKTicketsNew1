@@ -12,31 +12,33 @@ namespace PKTickets.Controllers
     public class SchedulesController : ControllerBase
     {
 
-        private readonly IScheduleRepository showRepository;
+        private readonly IScheduleRepository scheduleRepository;
 
         public SchedulesController(IScheduleRepository _showRepository)
         {
-            showRepository = _showRepository;
+            scheduleRepository = _showRepository;
         }
 
 
-        [HttpGet("SchedulesList")]
-        public IActionResult SchedulesList()
+        [HttpGet("")]
+        public IActionResult List()
         {
-            return Ok(showRepository.SchedulesList());
+            return Ok(scheduleRepository.SchedulesList());
+        }
+        
+
+        [HttpGet("Available")]
+        public IActionResult AvailableList()
+        {
+            return Ok(scheduleRepository.AvailableSchedulesList());
         }
 
-        [HttpGet("AvailableSchedulesList")]
-        public IActionResult AvailableSchedulesList()
-        {
-            return Ok(showRepository.AvailableSchedulesList());
-        }
 
-        [HttpGet("ScheduleById/{id}")]
+        [HttpGet("{id}")]
 
-        public ActionResult ScheduleById(int id)
+        public ActionResult GetById(int id)
         {
-            var show = showRepository.ScheduleById(id);
+            var show = scheduleRepository.ScheduleById(id);
             if (show == null)
             {
                 return NotFound();
@@ -44,43 +46,90 @@ namespace PKTickets.Controllers
             return Ok(show);
         }
 
-        [HttpGet("SchedulesByMovieId/{id}")]
-        public IActionResult SchedulesByMovieId(int id)
+        [HttpGet("Movie/{id}")]
+        public IActionResult ListByMovieId(int id)
         {
-            return Ok(showRepository.SchedulesByMovieId(id));
+            var movie= scheduleRepository.MovieById(id);
+            if(movie == null)
+            {
+                return NotFound("Movie Id is Not Found");
+            }
+            return Ok(scheduleRepository.SchedulesByMovieId(id));
         }
 
 
-        [HttpPost("CreateSchedule")]
-        public IActionResult CreateSchedule(Schedule show)
+        [HttpPost("")]
+        public IActionResult Add(Schedule schedule)
         {
-            return Ok(showRepository.CreateSchedule(show));
+            var result = scheduleRepository.CreateSchedule(schedule);
+            if (result.Success == false)
+            {
+                return Conflict(result.Message);
+            }
+            return Created("https://localhost:7221/api/Schedules/" + schedule.ScheduleId + "", result.Message);
         }
 
 
-        [HttpPut("UpdateSchedule")]
-        public ActionResult UpdateSchedule(Schedule show)
+        [HttpPut("")]
+        public ActionResult Update(Schedule schedule)
         {
-            return Ok(showRepository.UpdateSchedule(show));
+            if (schedule.ScheduleId == 0)
+            {
+                return BadRequest("Enter the Schedule Id field");
+            }
+            var result = scheduleRepository.UpdateSchedule(schedule);
+            if (result.Message == "The Schedule Id is not found")
+            {
+                return NotFound(result.Message);
+            }
+            else if (result.Success == false)
+            {
+                return Conflict(result.Message);
+            }
+            return Ok(result.Message);
         }
 
 
-        [HttpPut("DeleteSchedule/{id}")]
 
-        public IActionResult DeleteSchedule(int id)
+        [HttpDelete("{id}")]
+
+        public IActionResult Remove(int id)
         {
-            return Ok(showRepository.DeleteSchedule(id));
+            var schedule = scheduleRepository.ScheduleById(id);
+            if(schedule == null)
+            {
+                return NotFound("The Schedule Id is notfound");
+            }
+            var result = scheduleRepository.DeleteSchedule(id);
+            if (result.Success == false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
         }
 
-        [HttpGet("SchedulesListByScreenId/{id}")]
-        public IActionResult SchedulesListByScreenId(int id)
+
+        [HttpGet("ScreenId/{id}")]
+        public IActionResult ListByScreenId(int id)
         {
-            return Ok(showRepository.SchedulesListByScreenId(id));
+            var screen= scheduleRepository.ScreenById(id);
+            if(screen == null)
+            {
+                return NotFound("Screen Id is notfound");
+            }
+            return Ok(scheduleRepository.SchedulesListByScreenId(id));
         }
-        [HttpGet("TheaterSchedulesById/{id}")]
-        public IActionResult TheaterSchedulesById(int id)
+
+
+        [HttpGet("TheaterId/{id}")]
+        public IActionResult ListByTheaterId(int id)
         {
-            return Ok(showRepository.TheaterSchedulesById(id));
+            var theater = scheduleRepository.TheaterById(id);
+            if (theater == null)
+            {
+                return NotFound("Theater Id is notfound");
+            }
+            return Ok(scheduleRepository.TheaterSchedulesById(id));
         }
     }
 }

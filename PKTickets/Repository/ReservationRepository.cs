@@ -36,7 +36,7 @@ namespace PKTickets.Repository
             var reservationExist = ReservationById(id);
             if (reservationExist == null)
             {
-                messages.Message = "Reservation Id("+id+") is not found";
+                messages.Message = "Reservation Id is not found";
             }
             DateTime date = DateTime.Now;
             TimeSpan time = new TimeSpan( date.Hour, date.Minute,0);
@@ -73,7 +73,7 @@ namespace PKTickets.Repository
             messages.Success = false;
             if(reservation.PremiumTickets==0 && reservation.EliteTickets== 0)
             {
-                messages.Message = " Atleast Please reaserve a seat";
+                messages.Message = "Atleast Please reaserve a seat";
                 return messages;
             }
             var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == reservation.UserId);
@@ -120,7 +120,7 @@ namespace PKTickets.Repository
             var reservationExist = ReservationById(reservation.ReservationId);
             if (reservationExist == null)
             {
-                messages.Message = "Reservation Id("+reservation.ReservationId+") is Not found";
+                messages.Message = "Reservation Id is Not found";
                 return messages;
             }
             DateTime date = DateTime.Now;
@@ -160,8 +160,16 @@ namespace PKTickets.Repository
             return details;
         }
 
-
-
+        public User UserById(int id)
+        {
+            var user = db.Users.Where(x => x.IsActive == true).FirstOrDefault(x => x.UserId == id);
+            return user;
+        }
+        public Schedule ScheduleById(int id)
+        {
+            var schedule = db.Schedules.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScheduleId == id);
+            return schedule;
+        }
 
 
 

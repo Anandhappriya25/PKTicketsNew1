@@ -49,7 +49,7 @@ namespace PKTickets.Repository
                 theater.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Theater "+theater.TheaterName+ " is Successfully deleted";
+                messages.Message = "Theater "+theater.TheaterName+ " is Successfully Removed";
             }
             return messages;
         }
@@ -81,7 +81,7 @@ namespace PKTickets.Repository
             var nameExist = db.Theaters.FirstOrDefault(x => x.TheaterName == theater.TheaterName);
             if (theaterExist == null)
             {
-                messages.Message = "Theater Id("+ theater.TheaterId + ") is not found";
+                messages.Message = "Theater Id is not found";
             }
             else if (nameExist != null && nameExist.TheaterId != theaterExist.TheaterId)
             {

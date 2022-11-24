@@ -102,7 +102,7 @@ namespace PKTickets.Repository
             var nameExist = DetailsByTiming(time);
             if (showTimeExist == null)
             {
-                messages.Message = "ShowTime Id(" + showTimeDTO.ShowTimeId + ") is not found";
+                messages.Message = "ShowTime Id is not found";
             }
             else if (nameExist != null)
             {

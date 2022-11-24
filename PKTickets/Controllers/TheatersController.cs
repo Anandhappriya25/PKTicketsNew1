@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PKTickets.Interfaces;
 using PKTickets.Models;
+using PKTickets.Repository;
+using System;
 
 namespace PKTickets.Controllers
 {
@@ -18,15 +20,15 @@ namespace PKTickets.Controllers
         }
 
 
-        [HttpGet("GetTheaterList")]
-        public IActionResult GetTheaterList()
+        [HttpGet("")]
+        public IActionResult List()
         {
             return Ok(theaterRepository.GetTheaters());
         }
 
-        [HttpGet("TheaterById/{theaterId}")]
+        [HttpGet("{theaterId}")]
 
-        public ActionResult TheaterById(int theaterId)
+        public ActionResult GetById(int theaterId)
         {
             var theater = theaterRepository.TheaterById(theaterId);
             if (theater == null)
@@ -36,34 +38,57 @@ namespace PKTickets.Controllers
             return Ok(theater);
         }
 
-        [HttpGet("TheatersByLocation/{location}")]
+        [HttpGet("Location/{location}")]
 
-        public ActionResult TheatersByLocation(string location)
+        public ActionResult GetByLocation(string location)
         {
             return Ok(theaterRepository.TheaterByLocation(location));
         }
 
 
-        [HttpPost("CreateTheater")]
+        [HttpPost("")]
 
-        public IActionResult CreateTheater(Theater theater)
+        public IActionResult Add(Theater theater)
         {
-            return Ok(theaterRepository.CreateTheater(theater));
+            var result = theaterRepository.CreateTheater(theater);
+            if (result.Success == false)
+            {
+                return Conflict(result.Message);
+            }
+            return Created("https://localhost:7221/api/Theaters/"+ theater.TheaterId +"", result.Message);
         }
 
 
-        [HttpPut("UpdateTheater")]
-        public ActionResult UpdateTheater(Theater theater)
+        [HttpPut("")]
+        public ActionResult Update(Theater theater)
         {
-            return Ok(theaterRepository.UpdateTheater(theater));
+            if (theater.TheaterId == 0)
+            {
+                return BadRequest("Enter the Theater Id field");
+            }
+            var result = theaterRepository.UpdateTheater(theater);
+            if (result.Message == "Theater Id is not found")
+            {
+                return NotFound(result.Message);
+            }
+            else if (result.Success == false)
+            {
+                return Conflict(result.Message);
+            }
+            return Ok(result.Message);
         }
 
 
-        [HttpPut("DeleteTheater/{theaterId}")]
+        [HttpDelete("{theaterId}")]
 
-        public IActionResult DeleteTheater(int theaterId)
+        public IActionResult Remove(int theaterId)
         {
-            return Ok(theaterRepository.DeleteTheater(theaterId));
+            var result = theaterRepository.DeleteTheater(theaterId);
+            if (result.Success == false)
+            {
+                return NotFound(result.Message);
+            }
+            return Ok(result.Message);
         }
     }
 }

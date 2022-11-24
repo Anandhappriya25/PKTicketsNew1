@@ -57,7 +57,7 @@ namespace PKTickets.Repository
                 db.Users.Add(user);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = user.UserName + " , Your Account is Successfully Registered";
+                messages.Message = user.UserName + ", Your Account is Successfully Registered And Your Id is "+user.UserId+"";
                 return messages;
             }
         }
@@ -77,7 +77,7 @@ namespace PKTickets.Repository
                 user.IsActive = false;
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "The "+user.UserName + " Account is Successfully deleted";
+                messages.Message = "The "+user.UserName + " Account is Successfully removed";
                 return messages;
             }
         }

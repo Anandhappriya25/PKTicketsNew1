@@ -12,8 +12,8 @@ using PKTickets.Models;
 namespace PKTickets.Migrations
 {
     [DbContext(typeof(PKTicketsDbContext))]
-    [Migration("20221121100949_init")]
-    partial class init
+    [Migration("20221123050703_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,10 +80,13 @@ namespace PKTickets.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
 
+                    b.Property<int>("EliteTickets")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NumberOfTickets")
+                    b.Property<int>("PremiumTickets")
                         .HasColumnType("int");
 
                     b.Property<int>("ScheduleId")

@@ -19,15 +19,15 @@ namespace PKTickets.Controllers
         }
 
 
-        [HttpGet("GetUserList")]
-        public IActionResult GetUserList()
+        [HttpGet("")]
+        public IActionResult List()
         {
             return Ok(userRepository.GetAllUsers());
         }
 
-        [HttpGet("UserById/{userId}")]
+        [HttpGet("{userId}")]
 
-        public ActionResult UserById(int userId)
+        public ActionResult GetById(int userId)
         {
             var user = userRepository.UserById(userId);
             if (user == null)
@@ -38,26 +38,41 @@ namespace PKTickets.Controllers
         }
 
 
-        [HttpPost("CreateUser")]
+        [HttpPost("")]
 
-        public IActionResult CreateUser(User user)
+        public IActionResult Add(User user)
         {
-            return Ok(userRepository.CreateUser(user));
+            var result=userRepository.CreateUser(user);
+            if(result.Success==false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Created("https://localhost:7221/api/users/YourId", result.Message);
         }
 
 
-        [HttpPut("UpdateUser")]
-        public ActionResult UpdateUser(User user)
+        [HttpPut("")]
+        public ActionResult Update(User user)
         {
-            return Ok(userRepository.UpdateUser(user));
+            var result = userRepository.UpdateUser(user);
+            if (result.Success == false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
         }
 
 
-        [HttpPut("DeleteUser/{userId}")]
+        [HttpDelete("{userId}")]
 
-        public IActionResult DeleteUser(int userId)
+        public IActionResult Remove(int userId)
         {
-            return Ok(userRepository.DeleteUser(userId));
+            var result = userRepository.DeleteUser(userId);
+            if (result.Success == false)
+            {
+                return NotFound(result.Message);
+            }
+            return Ok(result.Message);
         }
     }
 }

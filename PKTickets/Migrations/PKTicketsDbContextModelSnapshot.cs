@@ -77,10 +77,13 @@ namespace PKTickets.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
 
+                    b.Property<int>("EliteTickets")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NumberOfTickets")
+                    b.Property<int>("PremiumTickets")
                         .HasColumnType("int");
 
                     b.Property<int>("ScheduleId")

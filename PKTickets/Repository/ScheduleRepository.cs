@@ -107,7 +107,7 @@ namespace PKTickets.Repository
             DateTime date = DateTime.Now;
             var timeValue = TimesValue(date);
             var timeExist = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
-            if(date.Date >= schedule.Date && timeExist.ShowTiming > timeValue)
+            if(date.Date <= schedule.Date && timeExist.ShowTiming > timeValue)
             {
                 schedule.PremiumSeats = screen.PremiumCapacity;
                 schedule.EliteSeats = screen.EliteCapacity;

@@ -26,7 +26,7 @@ namespace PKTickets.Controllers
             return Ok(reservationRepository.ReservationList());
         }
 
-        [HttpGet("ScheduleId")]
+        [HttpGet("ScheduleId/{id}")]
         public IActionResult ListByScheduleId(int id)
         {
             var schedule=reservationRepository.ScheduleById(id);
@@ -87,7 +87,7 @@ namespace PKTickets.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpDelete("{id}")]
 
         public IActionResult Cancel(int id)
         {

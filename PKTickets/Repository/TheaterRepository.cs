@@ -68,7 +68,7 @@ namespace PKTickets.Repository
                 db.Theaters.Add(theater);
                 db.SaveChanges();
                 messages.Success = true;
-                messages.Message = "Theater " + theater.TheaterName + "is Successfully Added";
+                messages.Message = "Theater " + theater.TheaterName + " is Successfully Added";
             }
             return messages;
         }

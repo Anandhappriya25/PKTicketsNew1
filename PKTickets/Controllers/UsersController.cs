@@ -47,7 +47,7 @@ namespace PKTickets.Controllers
             {
                 return Conflict(result.Message);
             }
-            return Created("https://localhost:7221/api/users/"+user.UserId+"", result.Message);
+            return Created("" + TimingConvert.LocalHost("Users") + user.UserId+"", result.Message);
         }
 
 

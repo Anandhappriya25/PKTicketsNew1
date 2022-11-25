@@ -17,5 +17,7 @@ namespace PKTickets.Interfaces
         public Movie MovieById(int id);
         public Screen ScreenById(int id);
         public Theater TheaterById(int id);
+        public MovieDTO DetailsByMovieId(int id);
+
     }
 }

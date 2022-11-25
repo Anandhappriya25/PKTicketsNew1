@@ -165,7 +165,7 @@ namespace PKTickets.Repository
             list.ScreenName = screens.ScreenName; 
             list.PremiumCapacity = screens.PremiumCapacity;
             list.EliteCapacity = screens.EliteCapacity;
-            list.Schedules = SchedulesListId(id);
+            list.Schedules = SchedulesListScreenId(id);
             return list;
         }
         public Screen ScreenById(int id)
@@ -190,7 +190,7 @@ namespace PKTickets.Repository
                 scheduleList.ScreenName=screen.ScreenName;  
                 scheduleList.PremiumCapacity=screen.PremiumCapacity;    
                 scheduleList.EliteCapacity=screen.EliteCapacity;
-                scheduleList.Schedules = SchedulesListId(screen.ScreenId);
+                scheduleList.Schedules = SchedulesListScreenId(screen.ScreenId);
                 schedules.Add(scheduleList);
             }
             list.Screens = schedules;
@@ -202,10 +202,72 @@ namespace PKTickets.Repository
             return theater;
         }
 
-
+        public MovieDTO DetailsByMovieId(int id)
+        {
+            MovieDTO movie = new MovieDTO();
+            var moviename = db.Movies.Where(x => x.IsPlaying == true).FirstOrDefault(x => x.MovieId == id);
+            movie.MovieName = moviename.Title;
+            List<Schedule> schedulesList = AvailableSchedulesList().Where(x=> x.MovieId == id).ToList();    
+                //db.Schedules.Where(x => x.IsActive == true).Where(x => x.MovieId == id).ToList();
+            List<Schedule> uniqueSchedulesByScreen = schedulesList.DistinctBy(x => x.ScreenId).ToList();
+            List<Screen> screenList = new List<Screen>();
+            foreach (var schedule in uniqueSchedulesByScreen)
+            {
+                Screen screen = db.Screens.Where(x => x.IsActive == true).FirstOrDefault(x => x.ScreenId == schedule.ScreenId);
+                screenList.Add(screen);
+            }
+            List<Screen> uniqueScreen = screenList.DistinctBy(x => x.ScreenId).ToList();
+            List<Theater> theaterList = new List<Theater>();
+            foreach (var screen in uniqueScreen)
+            {
+                Theater theater = db.Theaters.Where(x => x.IsActive == true).FirstOrDefault(x => x.TheaterId == screen.TheaterId);
+                theaterList.Add(theater);
+            }
+            List<Theater> uniqueTheater = theaterList.DistinctBy(x => x.TheaterId).ToList();
+            foreach (var theater in uniqueTheater)
+            {
+                TheaterDetails theaters = new TheaterDetails();
+                theaters.TheaterId = theater.TheaterId;
+                theaters.TheaterName = theater.TheaterName;
+                List<Screen> theaterScreens = new List<Screen>();
+                foreach (var screen in uniqueScreen)
+                {
+                    if (screen.TheaterId == theater.TheaterId)
+                    {
+                        theaterScreens.Add(screen);
+                    }
+                }
+                foreach (var screen in theaterScreens)
+                {
+                    ScreenDetails newScreen = new ScreenDetails();
+                    newScreen.ScreenId = screen.ScreenId;
+                    newScreen.ScreenName = screen.ScreenName;
+                    newScreen.PremiumCapacity = screen.PremiumCapacity;
+                    newScreen.EliteCapacity = screen.EliteCapacity;
+                    //newScreen.Schedules=newScreen.Schedules == null ? new List<ScheduleDetails>() : newScreen.Schedules;
+                    foreach (var schedule in schedulesList)
+                    {
+                        if (schedule.ScreenId == screen.ScreenId)
+                        {
+                            ScheduleDetails schedules = new ScheduleDetails();
+                            schedules.ScheduleId = schedule.ScheduleId;
+                            schedules.Date = schedule.Date;
+                            var time = db.ShowTimes.FirstOrDefault(x => x.ShowTimeId == schedule.ShowTimeId);
+                            schedules.ShowTime = TimingConvert.ConvertToString(time.ShowTiming);
+                            schedules.AvailablePremiumSeats = schedule.AvailablePreSeats;
+                            schedules.AvailableEliteSeats = schedule.AvailableEliSeats;
+                            newScreen.Schedules.Add(schedules);
+                        }
+                    }
+                    theaters.Screens.Add(newScreen);
+                }
+                movie.Theaters.Add(theaters);
+            }
+            return movie;
+        }
         #region PrivateMethods
 
-        private List<SchedulesDTO> SchedulesListId(int id)
+        private List<SchedulesDTO> SchedulesListScreenId(int id)
         {
             DateTime date = DateTime.Now;
             var timeValue = TimesValue(date);
@@ -226,6 +288,7 @@ namespace PKTickets.Repository
 
             return screens;
         }
+   
         private int TimesValue(DateTime date)
         {
             TimeSpan time = new TimeSpan(date.Hour, date.Minute, 0);

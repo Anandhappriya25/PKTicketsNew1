@@ -4,30 +4,31 @@ namespace PKTickets.Models
 {
     public class TimedHostedService : IHostedService, IDisposable
     {
-        private readonly ILogger _logger;
-        private Timer _timer;
+        private int executionCount = 0;
+        private readonly ILogger<TimedHostedService> _logger;
+        private Timer? _timer = null;
         private readonly PKTicketsDbContext db;
 
-        public TimedHostedService(ILogger<TimedHostedService> logger, PKTicketsDbContext db)
+        public TimedHostedService(ILogger<TimedHostedService> logger, PKTicketsDbContext _db)
         {
             _logger = logger;
-            this.db = db;
+            this.db = _db;
         }
 
-
-        public Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Timed Background Service is starting.");
+            _logger.LogInformation("Timed Hosted Service running.");
 
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
+            _timer = new Timer(DoWork, null, TimeSpan.Zero,
+                TimeSpan.FromSeconds(5));
 
             return Task.CompletedTask;
         }
 
-        private void DoWork(object state)
+        private void DoWork(object? state)
         {
-            _logger.LogInformation("Timed Background Service is working.");
-            var schedules=db.Schedules.Where(x=>x.IsActive==true).ToList();
+            var count = Interlocked.Increment(ref executionCount);
+            var schedules = db.Schedules.Where(x => x.IsActive == true).ToList();
             DateTime date = DateTime.Now;
             var schedulesDate = schedules.Where(x => x.Date <= date.Date).ToList();
             TimeSpan time = new TimeSpan(date.Hour, date.Minute, 0);
@@ -41,11 +42,13 @@ namespace PKTickets.Models
                     db.SaveChanges();
                 }
             }
+            _logger.LogInformation(
+                "Timed Hosted Service is working. Count: {Count}", count);
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Timed Background Service is stopping.");
+            _logger.LogInformation("Timed Hosted Service is stopping.");
 
             _timer?.Change(Timeout.Infinite, 0);
 
@@ -58,3 +61,4 @@ namespace PKTickets.Models
         }
     }
 }
+   

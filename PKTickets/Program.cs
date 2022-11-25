@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PKTickets.Interfaces;
@@ -33,7 +34,7 @@ builder.Services.AddScoped<IShowTimeRepository, ShowTimeRepository>();
 builder.Services.AddScoped<IScreenRepository, ScreenRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-//builder.Services.AddScoped<IHostedService, TimedHostedService>();
+//builder.Services.AddHostedService<TimedHostedService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

@@ -48,7 +48,7 @@ namespace PKTickets.Controllers
             {
                 return Conflict(result.Message);
             }
-            return Created("https://localhost:7221/api/Screens/" + screen.ScreenId + "", result.Message);
+            return Created("" + TimingConvert.LocalHost("Screens") + screen.ScreenId + "", result.Message);
         }
 
 

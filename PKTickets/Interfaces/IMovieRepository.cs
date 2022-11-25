@@ -14,6 +14,5 @@ namespace PKTickets.Interfaces
         public Messages CreateMovie(Movie movie);
         public Messages DeleteMovie(int movieId);
         public Messages UpdateMovie(Movie movie);
-
     }
 }

@@ -54,6 +54,7 @@ namespace PKTickets.Controllers
 
         public IActionResult Add(Reservation reservation)
         {
+
             var result = reservationRepository.CreateReservation(reservation);
             if (result.Message == "Atleast Please reaserve a seat")
             {
@@ -63,7 +64,7 @@ namespace PKTickets.Controllers
             {
                 return NotFound(result.Message);
             }
-            return Created("https://localhost:7221/api/Theaters/" + reservation.ReservationId + "", result.Message);
+            return Created(""+ TimingConvert.LocalHost("Reservations") + reservation.ReservationId + "", result.Message);
         }
 
 

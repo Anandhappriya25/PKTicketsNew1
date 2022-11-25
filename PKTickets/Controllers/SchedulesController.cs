@@ -66,7 +66,7 @@ namespace PKTickets.Controllers
             {
                 return Conflict(result.Message);
             }
-            return Created("https://localhost:7221/api/Schedules/" + schedule.ScheduleId + "", result.Message);
+            return Created(""+ TimingConvert.LocalHost("Schedules") + schedule.ScheduleId + "", result.Message);
         }
 
 
@@ -130,6 +130,17 @@ namespace PKTickets.Controllers
                 return NotFound("Theater Id is notfound");
             }
             return Ok(scheduleRepository.TheaterSchedulesById(id));
+        }
+
+        [HttpGet("Details/Movie/{id}")]
+        public IActionResult DetailsByMovieId(int id)
+        {
+            var movie = scheduleRepository.MovieById(id);
+            if (movie == null)
+            {
+                return NotFound("Movie Id is Not Found");
+            }
+            return Ok(scheduleRepository.DetailsByMovieId(id));
         }
     }
 }

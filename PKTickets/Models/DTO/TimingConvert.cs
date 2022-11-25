@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using static System.Net.WebRequestMethods;
 
 namespace PKTickets.Models.DTO
 {
@@ -21,6 +22,11 @@ namespace PKTickets.Models.DTO
             DateTime ss = DateTime.Parse(t, System.Globalization.CultureInfo.CurrentCulture);
             string tt = ss.ToString("hh:mm tt");
             return tt;
+        }
+        public static string LocalHost(string name)
+        {
+            string value = "https://localhost:7221/api/" + name + "/";
+            return value;
         }
     }
 }

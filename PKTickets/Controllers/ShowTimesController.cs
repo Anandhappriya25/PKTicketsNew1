@@ -45,7 +45,7 @@ namespace PKTickets.Controllers
             {
                 return Conflict(result.Message);
             }
-            return Created("https://localhost:7221/api/ShowTimes/" + showTime.ShowTimeId + "", result.Message);
+            return Created("" + TimingConvert.LocalHost("ShowTimes") + showTime.ShowTimeId + "", result.Message);
         }
 
 

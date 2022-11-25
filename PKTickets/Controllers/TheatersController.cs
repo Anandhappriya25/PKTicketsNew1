@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PKTickets.Interfaces;
 using PKTickets.Models;
+using PKTickets.Models.DTO;
 using PKTickets.Repository;
 using System;
 
@@ -55,7 +56,7 @@ namespace PKTickets.Controllers
             {
                 return Conflict(result.Message);
             }
-            return Created("https://localhost:7221/api/Theaters/"+ theater.TheaterId +"", result.Message);
+            return Created("" + TimingConvert.LocalHost("Theaters") + theater.TheaterId +"", result.Message);
         }
 
 

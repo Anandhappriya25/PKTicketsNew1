@@ -4,20 +4,32 @@
     {
         public string MovieName { get; set; }
         public List<TheaterDetails> Theaters { get; set; }
+        public MovieDTO()
+        {
+            this.Theaters = new List<TheaterDetails>();
+        }
     }
     public class TheaterDetails
     {
-        public string TheaterId { get; set; }
+        public int TheaterId { get; set; }
         public string TheaterName { get; set; }
         public List<ScreenDetails> Screens { get; set; }
+        public TheaterDetails()
+        {
+            this.Screens = new List<ScreenDetails>();
+        }
     }
     public class ScreenDetails
     {
-        public string ScreenId { get; set; }
+        public int ScreenId { get; set; }
         public string ScreenName { get; set; }
         public int PremiumCapacity { get; set; }
         public int EliteCapacity { get; set; }
-        public List<ScheduleDetails> Schedules { get; set; }
+        public  List<ScheduleDetails> Schedules { get; set; }
+        public ScreenDetails()
+        {
+            this.Schedules = new List<ScheduleDetails>();
+        }
     }
     public class ScheduleDetails
     {
